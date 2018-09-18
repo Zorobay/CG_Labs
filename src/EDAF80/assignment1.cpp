@@ -86,20 +86,36 @@ int main()
 	//
 	// Set up the sun node and other related attributes
 	//
+
 	Node sun_node;
 	sun_node.set_geometry(sphere);
 	GLuint const sun_texture = bonobo::loadTexture2D("sunmap.png");
 	sun_node.add_texture("diffuse_texture", sun_texture, GL_TEXTURE_2D);
-	float const sun_spin_speed = glm::two_pi<float>() / 6.0f; // Full rotation in six seconds
+	float const sun_spin_speed = glm::two_pi<float>() / 12.0f; // Full rotation in six seconds
 
+    Node earth_node;
+    earth_node.set_geometry(sphere);
+    GLuint const earth_texture = bonobo::loadTexture2D("earthmap1k.png");
+    earth_node.add_texture("diffuse_texture", earth_texture, GL_TEXTURE_2D);
 
-	Node solar_system_node;
-	solar_system_node.add_child(&sun_node);
+    Node moon_node;
+    moon_node.set_geometry(sphere);
+    GLuint const moon_texture = bonobo::loadTexture2D("moonmap1k.png");
+    moon_node.add_texture("diffuse_texture", moon_texture, GL_TEXTURE_2D);
 
+    Node earth_pivot_node;
+    Node earth_trans_node;
 
-	//
-	// TODO: Create nodes for the remaining of the solar system
-	//
+    Node moon_pivot_node;
+
+    Node solar_system_node;
+    solar_system_node.add_child(&sun_node);
+    solar_system_node.add_child(&earth_pivot_node);
+
+	earth_pivot_node.add_child(&earth_trans_node);
+    earth_trans_node.add_child(&moon_pivot_node);
+    earth_trans_node.add_child(&earth_node);
+	moon_pivot_node.add_child(&moon_node);
 
 
 	// Retrieve the actual framebuffer size: for HiDPI monitors, you might
@@ -159,7 +175,7 @@ int main()
 		ImGui_ImplGlfwGL3_NewFrame();
 
 
-		//
+		//node
 		// Clear the screen
 		//
 		glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
@@ -169,17 +185,38 @@ int main()
 		// Update the transforms
 		//
 		sun_node.rotate_y(sun_spin_speed * delta_time);
+		sun_node.translate(glm::vec3(0,0,0));
+		sun_node.scale(glm::vec3(1,1,1));
 
+		earth_pivot_node.rotate_y(sun_spin_speed*delta_time*1.5);
+        earth_trans_node.set_translation(glm::vec3(5,0,0));
+        earth_node.rotate_y(10*sun_spin_speed*delta_time);
+        earth_node.set_scaling(glm::vec3(0.5,0.5,0.5));
+
+        moon_pivot_node.rotate_y(sun_spin_speed*delta_time*3);
+
+        moon_node.set_translation(glm::vec3(1.5,0,0));
+        moon_node.set_scaling(glm::vec3(0.2,0.2,0.2));
+        moon_node.rotate_y(5*sun_spin_speed*delta_time);
 
 		//
 		// Traverse the scene graph and render all nodes
 		//
 		std::stack<Node const*> node_stack({ &solar_system_node });
 		std::stack<glm::mat4> matrix_stack({ glm::mat4(1.0f) });
-		// TODO: Replace this explicit rendering of the Sun with a
-		// traversal of the scene graph and rendering of all its nodes.
-		sun_node.render(camera.GetWorldToClipMatrix(), sun_node.get_transform(), shader, [](GLuint /*program*/){});
 
+		while(!node_stack.empty()){
+			Node const *curNode = node_stack.top();
+			node_stack.pop();
+			glm::mat4 curMatrix = matrix_stack.top()*(curNode->get_transform());
+			matrix_stack.pop();
+			curNode->render(camera.GetWorldToClipMatrix(), curMatrix, shader, [](GLuint /*program*/){});
+			size_t nbr = curNode->get_children_nb();
+			for(size_t i = 0; i < nbr; i++){
+				node_stack.push(curNode->get_child(i));
+				matrix_stack.push(curMatrix);
+			}
+		}
 
 		//
 		// Display Dear ImGui windows
@@ -196,7 +233,9 @@ int main()
 		glfwSwapBuffers(window);
 	}
 
-	glDeleteTextures(1, &sun_texture);
+    glDeleteTextures(1, &sun_texture);
+    glDeleteTextures(1, &earth_texture);
+    glDeleteTextures(1, &moon_texture);
 
 
 	Log::View::Destroy();

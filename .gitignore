@@ -3,6 +3,7 @@ build/
 Debug/
 Release/
 ipch/
+cmake-build-debug*
 
 # Dependencies folder
 dependencies/
@@ -20,3 +21,6 @@ log.txt
 *.sdf
 *.suo
 *.vcxproj.user
+
+# Clion Files
+*.idea*
