@@ -139,6 +139,11 @@ int main()
     GLuint const saturn_texture = bonobo::loadTexture2D("saturnmap1k.png");
     saturn_node.add_texture("diffuse_texture", saturn_texture, GL_TEXTURE_2D);
 
+    Node saturn_rings_node;
+    saturn_rings_node.set_geometry(sphere);
+    GLuint const saturn_rings_texture = bonobo::loadTexture2D("saturnringmap1k.png");
+    saturn_rings_node.add_texture("diffuse_texture", saturn_rings_texture, GL_TEXTURE_2D);
+
     Node uranus_node;
     uranus_node.set_geometry(sphere);
     GLuint const uranus_texture = bonobo::loadTexture2D("uranusmap1k.png");
@@ -165,6 +170,7 @@ int main()
     Node deimos_pivot_node;
     Node jupiter_pivot_node;
     Node saturn_pivot_node;
+    Node saturn_trans_node;
     Node uranus_pivot_node;
     Node neptune_pivot_node;
     Node pluto_pivot_node;
@@ -199,7 +205,9 @@ int main()
 
     jupiter_pivot_node.add_child(&jupiter_node);
 
-    saturn_pivot_node.add_child(&saturn_node);
+    saturn_pivot_node.add_child(&saturn_trans_node);
+    saturn_trans_node.add_child(&saturn_node);
+    saturn_trans_node.add_child(&saturn_rings_node);
 
     uranus_pivot_node.add_child(&uranus_node);
 
@@ -318,9 +326,12 @@ int main()
         jupiter_node.set_scaling(glm::vec3(.7,.7,.7));
 
         saturn_pivot_node.rotate_y(sun_spin_speed*delta_time*.9);
-        saturn_node.set_translation(glm::vec3(14,0,0));
+        saturn_trans_node.set_translation(glm::vec3(14,0,0));
         saturn_node.rotate_y(4*sun_spin_speed*delta_time);
         saturn_node.set_scaling(glm::vec3(.5,.5,.5));
+        saturn_rings_node.set_scaling(glm::vec3(1,0.05,1));
+        saturn_rings_node.rotate_y(0);
+        saturn_rings_node.set_rotation_x(0.3f);
 
         uranus_pivot_node.rotate_y(sun_spin_speed*delta_time*.8);
         uranus_node.set_translation(glm::vec3(17,0,0));
@@ -346,6 +357,9 @@ int main()
 		while(!node_stack.empty()){
 			Node const *curNode = node_stack.top();
 			node_stack.pop();
+			if(curNode==&saturn_rings_node){
+			    std::cout << "break" << std::endl;
+			}
 			glm::mat4 curMatrix = matrix_stack.top()*(curNode->get_transform());
 			matrix_stack.pop();
 			curNode->render(camera.GetWorldToClipMatrix(), curMatrix, shader, [](GLuint /*program*/){});
