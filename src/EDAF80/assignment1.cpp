@@ -357,9 +357,6 @@ int main()
 		while(!node_stack.empty()){
 			Node const *curNode = node_stack.top();
 			node_stack.pop();
-			if(curNode==&saturn_rings_node){
-			    std::cout << "break" << std::endl;
-			}
 			glm::mat4 curMatrix = matrix_stack.top()*(curNode->get_transform());
 			matrix_stack.pop();
 			curNode->render(camera.GetWorldToClipMatrix(), curMatrix, shader, [](GLuint /*program*/){});
