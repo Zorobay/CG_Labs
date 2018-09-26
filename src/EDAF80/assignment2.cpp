@@ -57,12 +57,13 @@ void
 edaf80::Assignment2::run()
 {
 	// Load the sphere geometry
-	auto const shape = parametric_shapes::createCircleRing(4u, 60u, 1.0f, 2.0f);
+	// auto const shape = parametric_shapes::createCircleRing(4u, 60u, 1.0f, 2.0f);
+	auto const shape = parametric_shapes::createSphere(10u, 10u, 2.0f);
 	if (shape.vao == 0u)
 		return;
 
 	// Set up the camera
-	mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 0.0f, 6.0f));
+	mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 0.0f, 16.0f));
 	mCamera.mMouseSensitivity = 0.003f;
 	mCamera.mMovementSpeed = 0.25f * 12.0f;
 
@@ -137,6 +138,34 @@ edaf80::Assignment2::run()
 	bool show_logs = true;
 	bool show_gui = true;
 
+	auto points = std::vector<glm::vec3>{glm::vec3(0,0,0),
+										 glm::vec3(1,0,0),
+										 glm::vec3(1,1,0),
+										 glm::vec3(1,1,1),
+										 glm::vec3(0,1,0),
+										 glm::vec3(2,0,3),
+										 glm::vec3(-1,4,2),
+										 glm::vec3(2,-2,-1)};
+
+	unsigned int points_nbr = points.size();
+
+	unsigned int steps = 50;
+	auto position = std::vector<glm::vec3>(steps*points_nbr);
+	int index = 0;
+	for(int i = 0; i < points_nbr; i++) {
+		for (int j = 0; j < steps; j++) {
+			float t = static_cast<float>(j) / static_cast<float>(steps);
+			std::cout << t << std::endl;
+			//position[index++] = interpolation::evalLERP(points[i], points[(i+1) % points_nbr], t);
+			position[i*steps + j] = interpolation::evalCatmullRom(points[(i+points_nbr-1) % points_nbr],
+																		points[i],
+																		points[(i+1) % points_nbr],
+																		points[(i+2) % points_nbr],
+																		0.5f, t);
+		}
+	}
+
+	float count = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		nowTime = GetTimeSeconds();
 		ddeltatime = nowTime - lastTime;
@@ -190,10 +219,9 @@ edaf80::Assignment2::run()
 
 		circle_rings.rotate_y(0.01f);
 
-
-		//! \todo Interpolate the movement of a shape between various
-		//!        control points
-
+		unsigned int index = static_cast<unsigned int>(count) % (steps*points_nbr);
+		circle_rings.set_translation(position[index]);
+		count += ddeltatime*40;
 
 		int framebuffer_width, framebuffer_height;
 		glfwGetFramebufferSize(window, &framebuffer_width, &framebuffer_height);
