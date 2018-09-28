@@ -123,6 +123,7 @@ parametric_shapes::createSphere(unsigned int const res_theta,
 	auto vertices  = std::vector<glm::vec3>(vertices_nbr);
 	auto normals   = std::vector<glm::vec3>(vertices_nbr);
 	auto tangents  = std::vector<glm::vec3>(vertices_nbr);
+	auto texcoords  = std::vector<glm::vec3>(vertices_nbr);
 	auto binormals = std::vector<glm::vec3>(vertices_nbr);
 
 	float theta = 0.0f;
@@ -144,9 +145,11 @@ parametric_shapes::createSphere(unsigned int const res_theta,
 
 			vertices[index] = glm::vec3(radius * sin_theta * sin_phi, (-1) * radius * cos_phi, radius * cos_theta * sin_phi);
 
-			auto t = glm::vec3(radius * cos_theta * sin_phi, 0, (-1) * radius * sin_theta * sin_phi);
+			auto t = glm::vec3(radius * cos_theta, 0, (-1) * radius * sin_theta);
 			t = glm::normalize(t);
 			tangents[index] = t;
+
+            texcoords[index] = glm::vec3(static_cast<float>(j) / (static_cast<float>(res_phi) - 1.0f), static_cast<float>(i) / (static_cast<float>(res_theta)  - 1.0f), 0.0f);
 
 			auto b = glm::vec3(radius * sin_theta * cos_phi, radius * sin_phi, radius * cos_theta * cos_phi);
 			b = glm::normalize(b);
@@ -189,11 +192,13 @@ parametric_shapes::createSphere(unsigned int const res_theta,
 	auto const vertices_size = static_cast<GLsizeiptr>(vertices.size() * sizeof(glm::vec3));
 	auto const normals_offset = vertices_size;
 	auto const normals_size = static_cast<GLsizeiptr>(normals.size() * sizeof(glm::vec3));
-	auto const tangents_offset = normals_offset + normals_size;
+	auto const texcoords_offset = normals_offset + normals_size;
+	auto const texcoords_size = static_cast<GLsizeiptr>(texcoords.size() * sizeof(glm::vec3));
+	auto const tangents_offset = texcoords_offset + texcoords_size;
 	auto const tangents_size = static_cast<GLsizeiptr>(tangents.size() * sizeof(glm::vec3));
 	auto const binormals_offset = tangents_offset + tangents_size;
 	auto const binormals_size = static_cast<GLsizeiptr>(binormals.size() * sizeof(glm::vec3));
-	auto const bo_size = static_cast<GLsizeiptr>(vertices_size + normals_size + tangents_size + binormals_size);
+	auto const bo_size = static_cast<GLsizeiptr>(vertices_size + normals_size + texcoords_size + tangents_size + binormals_size);
 	glGenBuffers(1, &data.bo);
 	assert(data.bo != 0u);
 	glBindBuffer(GL_ARRAY_BUFFER, data.bo);
@@ -202,6 +207,10 @@ parametric_shapes::createSphere(unsigned int const res_theta,
 	glBufferSubData(GL_ARRAY_BUFFER, vertices_offset, vertices_size, static_cast<GLvoid const*>(vertices.data()));
 	glEnableVertexAttribArray(static_cast<unsigned int>(bonobo::shader_bindings::vertices));
 	glVertexAttribPointer(static_cast<unsigned int>(bonobo::shader_bindings::vertices), 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<GLvoid const*>(0x0));
+
+	glBufferSubData(GL_ARRAY_BUFFER, texcoords_offset, texcoords_size, static_cast<GLvoid const*>(texcoords.data()));
+	glEnableVertexAttribArray(static_cast<unsigned int>(bonobo::shader_bindings::texcoords));
+	glVertexAttribPointer(static_cast<unsigned int>(bonobo::shader_bindings::texcoords), 3, GL_FLOAT, GL_FALSE, 0, reinterpret_cast<GLvoid const*>(texcoords_offset));
 
 	glBufferSubData(GL_ARRAY_BUFFER, normals_offset, normals_size, static_cast<GLvoid const*>(normals.data()));
 	glEnableVertexAttribArray(static_cast<unsigned int>(bonobo::shader_bindings::normals));
@@ -228,17 +237,61 @@ parametric_shapes::createSphere(unsigned int const res_theta,
 
 	return data;
 }
-
+/**
 bonobo::mesh_data
 parametric_shapes::createTorus(unsigned int const res_theta,
                                unsigned int const res_phi, float const rA,
                                float const rB)
 {
-	//! \todo (Optional) Implement this function
+	auto const vertices_nbr =  res_theta * res_phi;
+
+	auto vertices  = std::vector<glm::vec3>(vertices_nbr);
+	auto normals   = std::vector<glm::vec3>(vertices_nbr);
+	auto texcoords = std::vector<glm::vec3>(vertices_nbr);
+	auto tangents  = std::vector<glm::vec3>(vertices_nbr);
+	auto binormals = std::vector<glm::vec3>(vertices_nbr);
+
+	float theta = 0.0f;
+	float dtheta = glm::two_pi<float>() / (static_cast<float>(res_theta) - 1.0f);
+
+	float phi = 0.0f;
+	float dphi =  glm::pi<float>() / (static_cast<float>(res_phi) - 1.0f);
+
+	size_t index = 0u;
+	for(unsigned int i = 0; i < res_theta; i++){
+		float cos_theta = std::cos(theta);
+		float sin_theta = std::sin(theta);
+
+		phi = 0.0f;
+
+		for(unsigned int j = 0; j < res_phi; j++){
+			float cos_phi = std::cos(phi);
+			float sin_phi = std::sin(phi);
+
+			vertices[index] = glm::vec3((rA + rB*cos_theta)*cos_phi, (rA + rB*cos_theta)*sin_phi, (-1)*rB*sin_theta);
+
+			auto t = glm::vec3(radius * cos_theta * sin_phi, 0, (-1) * radius * sin_theta * sin_phi);
+			t = glm::normalize(t);
+			tangents[index] = t;
+
+			texcoords[index] = glm::vec3(static_cast<float>(j) / (static_cast<float>(res_phi) - 1.0f), static_cast<float>(i) / (static_cast<float>(res_theta)  - 1.0f), 0.0f);
+
+			auto b = glm::vec3(radius * sin_theta * cos_phi, radius * sin_phi, radius * cos_theta * cos_phi);
+			b = glm::normalize(b);
+			binormals[index] = b;
+
+			auto const n = glm::cross(t, b);
+			normals[index] = n;
+
+			phi += dphi;
+			++index;
+		}
+		theta += dtheta;
+	}
 	return bonobo::mesh_data();
 
 }
-
+*/
 
 bonobo::mesh_data
 parametric_shapes::createCircleRing(unsigned int const res_radius,

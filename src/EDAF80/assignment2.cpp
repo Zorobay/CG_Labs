@@ -116,6 +116,8 @@ edaf80::Assignment2::run()
 	circle_rings.set_geometry(shape);
 	circle_rings.set_program(&fallback_shader, set_uniforms);
 
+	//circle_rings.set_scaling(glm::vec3(.5));
+
 
 	//! \todo Create a tesselated sphere and a tesselated torus
 
@@ -149,19 +151,19 @@ edaf80::Assignment2::run()
 
 	unsigned int points_nbr = points.size();
 
-	unsigned int steps = 50;
+	unsigned int steps = 100;
 	auto position = std::vector<glm::vec3>(steps*points_nbr);
 	int index = 0;
 	for(int i = 0; i < points_nbr; i++) {
 		for (int j = 0; j < steps; j++) {
 			float t = static_cast<float>(j) / static_cast<float>(steps);
 			std::cout << t << std::endl;
-			//position[index++] = interpolation::evalLERP(points[i], points[(i+1) % points_nbr], t);
-			position[i*steps + j] = interpolation::evalCatmullRom(points[(i+points_nbr-1) % points_nbr],
-																		points[i],
-																		points[(i+1) % points_nbr],
-																		points[(i+2) % points_nbr],
-																		0.5f, t);
+			position[index++] = interpolation::evalLERP(points[i], points[(i+1) % points_nbr], t);
+			//position[i*steps + j] = interpolation::evalCatmullRom(points[(i+points_nbr-1) % points_nbr],
+			//															points[i],
+			//															points[(i+1) % points_nbr],
+			//															points[(i+2) % points_nbr],
+			//															catmull_rom_tension, t);
 		}
 	}
 
@@ -221,7 +223,7 @@ edaf80::Assignment2::run()
 
 		unsigned int index = static_cast<unsigned int>(count) % (steps*points_nbr);
 		circle_rings.set_translation(position[index]);
-		count += ddeltatime*40;
+		count += ddeltatime*steps*0.75f;
 
 		int framebuffer_width, framebuffer_height;
 		glfwGetFramebufferSize(window, &framebuffer_width, &framebuffer_height);
