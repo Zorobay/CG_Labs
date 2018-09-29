@@ -19,8 +19,156 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="4db9a7d7-6cb3-49ee-b94e-1b105f2f0873" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../.idea/.name" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/EDAF80_Labs.iml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/codeStyles/Project.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/misc.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/modules.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CG_Labs.cbp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeCache.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CMakeCCompiler.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CMakeCXXCompiler.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CMakeDetermineCompilerABI_C.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CMakeDetermineCompilerABI_CXX.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CMakeSystem.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CompilerIdC/CMakeCCompilerId.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CompilerIdC/a.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CompilerIdCXX/CMakeCXXCompilerId.cpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/3.12.1/CompilerIdCXX/a.out" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/CMakeOutput.log" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/Makefile.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/Makefile2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/TargetDirectories.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/clion-environment.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/clion-log.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/cmake.check_cache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/feature_tests.bin" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/feature_tests.c" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/feature_tests.cxx" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/CMakeFiles/progress.marks" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/cmake_install.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/config.hpp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/C.includecache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/CXX.includecache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/assignment1.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/depend.internal" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/depend.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/flags.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/interpolation.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/link.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/parametric_shapes.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment1.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/C.includecache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/CXX.includecache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/assignment2.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/depend.internal" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/depend.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/flags.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/interpolation.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/link.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/parametric_shapes.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment2.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment3.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment3.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment3.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment3.dir/depend.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment3.dir/flags.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment3.dir/link.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment3.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment4.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment4.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment4.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment4.dir/depend.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment4.dir/flags.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment4.dir/link.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment4.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment5.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment5.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment5.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment5.dir/depend.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment5.dir/flags.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment5.dir/link.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/EDAF80_Assignment5.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/CMakeFiles/progress.marks" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/EDAF80_Assignment1" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/EDAF80_Assignment2" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAF80/cmake_install.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/EDAN35_Assignment2.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/EDAN35_Assignment2.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/EDAN35_Assignment2.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/EDAN35_Assignment2.dir/depend.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/EDAN35_Assignment2.dir/flags.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/EDAN35_Assignment2.dir/link.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/EDAN35_Assignment2.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/CMakeFiles/progress.marks" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/EDAN35/cmake_install.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/Bonobo.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/CXX.includecache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/GLStateInspection.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/GLStateInspectionView.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/InputHandler.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/Log.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/LogView.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/Misc.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/ShaderProgramManager.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/Types.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/WindowManager.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/cmake_clean_target.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/depend.internal" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/depend.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/flags.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/helpers.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/link.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/node.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/opengl.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/bonobo.dir/various.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/CMakeFiles/progress.marks" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/bonobo.cbp" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/cmake_install.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/core/libbonobo.a" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/CMakeDirectoryInformation.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/C.includecache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/CXX.includecache" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/DependInfo.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/build.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/cmake_clean.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/cmake_clean_target.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/depend.internal" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/depend.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/flags.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/glad.c.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/imgui_impl_glfw_gl3.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/link.txt" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/lodepng.cpp.o" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/external_libs.dir/progress.make" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/CMakeFiles/progress.marks" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/Makefile" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/cmake_install.cmake" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../cmake-build-debug/src/external/libexternal_libs.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/EDAF80/assignment1.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../src/EDAF80/assignment1.cpp" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/EDAF80/assignment2.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../src/EDAF80/assignment2.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/EDAF80/interpolation.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../src/EDAF80/interpolation.cpp" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../src/EDAF80/parametric_shapes.cpp" beforeDir="false" afterPath="$PROJECT_DIR$/../src/EDAF80/parametric_shapes.cpp" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/cmake-build-debug/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -60,22 +208,22 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="cpp" value="2" />
+          <entry key="cpp" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="ObjectiveC" value="2" />
+          <entry key="ObjectiveC" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="cpp" value="3" />
+          <entry key="cpp" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="ObjectiveC" value="3" />
+          <entry key="ObjectiveC" value="9" />
         </counts>
       </usages-collector>
     </session>
@@ -99,11 +247,50 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../src/EDAF80/assignment2.cpp">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="15">
-              <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+            <state relative-caret-position="538">
+              <caret line="265" column="1" selection-start-line="265" selection-start-column="1" selection-end-line="265" selection-end-column="1" />
+              <folding>
+                <element signature="e#1#27#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/EDAF80/parametric_shapes.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="538">
+              <caret line="421" column="1" selection-start-line="421" selection-start-column="1" selection-end-line="421" selection-end-column="1" />
+              <folding>
+                <element signature="e#0#32#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../src/EDAF80/interpolation.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="315">
+              <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+              <folding>
+                <element signature="e#0#28#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../src/EDAF80/assignment3.cpp">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="285">
+              <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
+              <folding>
+                <element signature="e#0#26#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -118,6 +305,8 @@
       <list>
         <option value="$PROJECT_DIR$/../src/EDAF80/assignment1.cpp" />
         <option value="$PROJECT_DIR$/../src/EDAF80/assignment2.cpp" />
+        <option value="$PROJECT_DIR$/../src/EDAF80/parametric_shapes.cpp" />
+        <option value="$PROJECT_DIR$/../src/EDAF80/interpolation.cpp" />
       </list>
     </option>
   </component>
@@ -258,12 +447,12 @@
       <workItem from="1538222382636" duration="652000" />
       <workItem from="1538223424515" duration="9000" />
       <workItem from="1538223471896" duration="40000" />
-      <workItem from="1538223531153" duration="903000" />
+      <workItem from="1538223531153" duration="1267000" />
     </task>
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="1604000" />
+    <option name="totallyTimeSpent" value="1968000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="67" y="25" width="1853" height="1055" extended-state="6" />
@@ -313,8 +502,41 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/../src/EDAF80/assignment2.cpp">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="15">
-          <caret line="1" lean-forward="true" selection-start-line="1" selection-end-line="1" />
+        <state relative-caret-position="538">
+          <caret line="265" column="1" selection-start-line="265" selection-start-column="1" selection-end-line="265" selection-end-column="1" />
+          <folding>
+            <element signature="e#1#27#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/EDAF80/parametric_shapes.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="538">
+          <caret line="421" column="1" selection-start-line="421" selection-start-column="1" selection-end-line="421" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#32#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/EDAF80/interpolation.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="315">
+          <caret line="21" column="1" selection-start-line="21" selection-start-column="1" selection-end-line="21" selection-end-column="1" />
+          <folding>
+            <element signature="e#0#28#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../src/EDAF80/assignment3.cpp">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="64" column="4" selection-start-line="64" selection-start-column="4" selection-end-line="64" selection-end-column="4" />
+          <folding>
+            <element signature="e#0#26#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
