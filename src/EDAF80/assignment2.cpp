@@ -1,3 +1,4 @@
+
 #include "assignment2.hpp"
 #include "interpolation.hpp"
 #include "parametric_shapes.hpp"
@@ -32,10 +33,10 @@ static polygon_mode_t get_next_mode(polygon_mode_t mode)
 }
 
 edaf80::Assignment2::Assignment2() :
-	mCamera(0.5f * glm::half_pi<float>(),
-	        static_cast<float>(config::resolution_x) / static_cast<float>(config::resolution_y),
-	        0.01f, 1000.0f),
-	inputHandler(), mWindowManager(), window(nullptr)
+		mCamera(0.5f * glm::half_pi<float>(),
+				static_cast<float>(config::resolution_x) / static_cast<float>(config::resolution_y),
+				0.01f, 1000.0f),
+		inputHandler(), mWindowManager(), window(nullptr)
 {
 	Log::View::Init();
 
@@ -57,12 +58,13 @@ void
 edaf80::Assignment2::run()
 {
 	// Load the sphere geometry
-	auto const shape = parametric_shapes::createCircleRing(4u, 60u, 1.0f, 2.0f);
+	// auto const shape = parametric_shapes::createCircleRing(4u, 60u, 1.0f, 2.0f);
+	auto const shape = parametric_shapes::createSphere(10u, 10u, 2.0f);
 	if (shape.vao == 0u)
 		return;
 
 	// Set up the camera
-	mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 0.0f, 6.0f));
+	mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 0.0f, 16.0f));
 	mCamera.mMouseSensitivity = 0.003f;
 	mCamera.mMovementSpeed = 0.25f * 12.0f;
 
@@ -70,8 +72,8 @@ edaf80::Assignment2::run()
 	ShaderProgramManager program_manager;
 	GLuint fallback_shader = 0u;
 	program_manager.CreateAndRegisterProgram({ { ShaderType::vertex, "EDAF80/fallback.vert" },
-	                                           { ShaderType::fragment, "EDAF80/fallback.frag" } },
-	                                         fallback_shader);
+											   { ShaderType::fragment, "EDAF80/fallback.frag" } },
+											 fallback_shader);
 	if (fallback_shader == 0u) {
 		LogError("Failed to load fallback shader");
 		return;
@@ -79,22 +81,22 @@ edaf80::Assignment2::run()
 
 	GLuint diffuse_shader = 0u;
 	program_manager.CreateAndRegisterProgram({ { ShaderType::vertex, "EDAF80/diffuse.vert" },
-	                                           { ShaderType::fragment, "EDAF80/diffuse.frag" } },
-	                                         diffuse_shader);
+											   { ShaderType::fragment, "EDAF80/diffuse.frag" } },
+											 diffuse_shader);
 	if (diffuse_shader == 0u)
 		LogError("Failed to load diffuse shader");
 
 	GLuint normal_shader = 0u;
 	program_manager.CreateAndRegisterProgram({ { ShaderType::vertex, "EDAF80/normal.vert" },
-	                                           { ShaderType::fragment, "EDAF80/normal.frag" } },
-	                                         normal_shader);
+											   { ShaderType::fragment, "EDAF80/normal.frag" } },
+											 normal_shader);
 	if (normal_shader == 0u)
 		LogError("Failed to load normal shader");
 
 	GLuint texcoord_shader = 0u;
 	program_manager.CreateAndRegisterProgram({ { ShaderType::vertex, "EDAF80/texcoord.vert" },
-	                                           { ShaderType::fragment, "EDAF80/texcoord.frag" } },
-	                                         texcoord_shader);
+											   { ShaderType::fragment, "EDAF80/texcoord.frag" } },
+											 texcoord_shader);
 	if (texcoord_shader == 0u)
 		LogError("Failed to load texcoord shader");
 
@@ -114,6 +116,8 @@ edaf80::Assignment2::run()
 	auto circle_rings = Node();
 	circle_rings.set_geometry(shape);
 	circle_rings.set_program(&fallback_shader, set_uniforms);
+
+	//circle_rings.set_scaling(glm::vec3(.5));
 
 
 	//! \todo Create a tesselated sphere and a tesselated torus
@@ -137,6 +141,34 @@ edaf80::Assignment2::run()
 	bool show_logs = true;
 	bool show_gui = true;
 
+	auto points = std::vector<glm::vec3>{glm::vec3(0,0,0),
+										 glm::vec3(1,0,0),
+										 glm::vec3(1,1,0),
+										 glm::vec3(1,1,1),
+										 glm::vec3(0,1,0),
+										 glm::vec3(2,0,3),
+										 glm::vec3(-1,4,2),
+										 glm::vec3(2,-2,-1)};
+
+	unsigned int points_nbr = points.size();
+
+	unsigned int steps = 100;
+	auto position = std::vector<glm::vec3>(steps*points_nbr);
+	int index = 0;
+	for(int i = 0; i < points_nbr; i++) {
+		for (int j = 0; j < steps; j++) {
+			float t = static_cast<float>(j) / static_cast<float>(steps);
+			std::cout << t << std::endl;
+			position[index++] = interpolation::evalLERP(points[i], points[(i+1) % points_nbr], t);
+			//position[i*steps + j] = interpolation::evalCatmullRom(points[(i+points_nbr-1) % points_nbr],
+			//															points[i],
+			//															points[(i+1) % points_nbr],
+			//															points[(i+2) % points_nbr],
+			//															catmull_rom_tension, t);
+		}
+	}
+
+	float count = 0.0f;
 	while (!glfwWindowShouldClose(window)) {
 		nowTime = GetTimeSeconds();
 		ddeltatime = nowTime - lastTime;
@@ -190,10 +222,9 @@ edaf80::Assignment2::run()
 
 		circle_rings.rotate_y(0.01f);
 
-
-		//! \todo Interpolate the movement of a shape between various
-		//!        control points
-
+		unsigned int index = static_cast<unsigned int>(count) % (steps*points_nbr);
+		circle_rings.set_translation(position[index]);
+		count += ddeltatime*steps*0.75f;
 
 		int framebuffer_width, framebuffer_height;
 		glfwGetFramebufferSize(window, &framebuffer_width, &framebuffer_height);
