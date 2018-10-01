@@ -4,6 +4,7 @@ Debug/
 Release/
 ipch/
 cmake-build-debug/
+.idea/
 
 # Dependencies folder
 dependencies/
