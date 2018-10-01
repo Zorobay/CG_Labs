@@ -1,2 +1,0 @@
-/usr/bin/ar qc libexternal_libs.a  CMakeFiles/external_libs.dir/glad.c.o CMakeFiles/external_libs.dir/imgui_impl_glfw_gl3.cpp.o CMakeFiles/external_libs.dir/lodepng.cpp.o
-/usr/bin/ranlib libexternal_libs.a
