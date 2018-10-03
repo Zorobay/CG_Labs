@@ -59,7 +59,7 @@ edaf80::Assignment2::run()
 {
 	// Load the sphere geometry
 	// auto const shape = parametric_shapes::createCircleRing(4u, 60u, 1.0f, 2.0f);
-	auto const shape = parametric_shapes::createSphere(10u, 10u, 2.0f);
+	auto const shape = parametric_shapes::createSphere(50u, 50u, 2.0f);
 	if (shape.vao == 0u)
 		return;
 
