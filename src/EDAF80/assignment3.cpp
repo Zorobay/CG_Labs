@@ -151,8 +151,9 @@ edaf80::Assignment3::run() {
 
     // Setup nodes
     auto circle_ring = Node();
-    circle_ring.set_geometry(circle_ring_shape);
-    circle_ring.set_program(&normal_map_shader, set_uniforms);
+    circle_ring.set_geometry(sphere_shape);
+    circle_ring.set_scaling(glm::vec3(0.005f));
+    circle_ring.set_program(&normal_map_shader, phong_set_uniforms);
 
     auto sphere_node = Node();
     sphere_node.set_geometry(sphere_shape);
@@ -214,7 +215,7 @@ edaf80::Assignment3::run() {
             circle_ring.set_program(&texcoord_shader, set_uniforms);
         }
         if (inputHandler.GetKeycodeState(GLFW_KEY_5) & JUST_PRESSED) {
-            circle_ring.set_program(&cube_map_shader, set_uniforms);
+            circle_ring.set_program(&normal_map_shader, set_uniforms);
             sphere_node.set_program(&cube_map_shader, set_uniforms);
         }
         if (inputHandler.GetKeycodeState(GLFW_KEY_Z) & JUST_PRESSED) {
