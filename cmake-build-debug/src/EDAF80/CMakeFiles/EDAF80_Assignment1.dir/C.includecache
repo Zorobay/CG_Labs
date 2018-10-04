@@ -1,0 +1,44 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/tinyfiledialogs-source/tinyfiledialogs.c
+stdio.h
+-
+stdlib.h
+-
+string.h
+-
+ctype.h
+-
+sys/stat.h
+-
+tinyfiledialogs.h
+/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/tinyfiledialogs-source/tinyfiledialogs.h
+windows.h
+-
+shlobj.h
+-
+conio.h
+-
+commdlg.h
+-
+limits.h
+-
+unistd.h
+-
+dirent.h
+-
+termios.h
+-
+sys/utsname.h
+-
+signal.h
+-
+
+/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/tinyfiledialogs-source/tinyfiledialogs.h
+

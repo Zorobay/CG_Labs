@@ -55,10 +55,10 @@ edaf80::Assignment3::~Assignment3() {
 void
 edaf80::Assignment3::run() {
     // Load the sphere geometry
-    auto circle_ring_shape = parametric_shapes::createCircleRing(4u, 60u, 1.0f, 2.0f);
+    auto sphere2_shape = parametric_shapes::createSphere(50, 50, 100.0f);
     auto sphere_shape = parametric_shapes::createSphere(10, 10, 100.0f);
     auto quad_shape = parametric_shapes::createQuad(1, 1);
-    if (circle_ring_shape.vao == 0u || sphere_shape.vao == 0u || quad_shape.vao == 0u) {
+    if (sphere2_shape.vao == 0u || sphere_shape.vao == 0u || quad_shape.vao == 0u) {
         LogError("Failed to retrieve the circle ring mesh");
         return;
     }
@@ -134,7 +134,7 @@ edaf80::Assignment3::run() {
     auto ambient = glm::vec3(0.2f, 0.2f, 0.2f);
     auto diffuse = glm::vec3(0.7f, 0.2f, 0.4f);
     auto specular = glm::vec3(1.0f, 1.0f, 1.0f);
-    auto shininess = 1.0f;
+    auto shininess = 4.0f;
     auto const phong_set_uniforms = [&light_position, &camera_position, &ambient, &diffuse, &specular, &shininess](
             GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
@@ -151,9 +151,13 @@ edaf80::Assignment3::run() {
 
     // Setup nodes
     auto circle_ring = Node();
-    circle_ring.set_geometry(sphere_shape);
+    circle_ring.set_geometry(sphere2_shape);
     circle_ring.set_scaling(glm::vec3(0.005f));
     circle_ring.set_program(&normal_map_shader, phong_set_uniforms);
+    GLuint const bump_texture = bonobo::loadTexture2D("fieldstone_bump.png");
+    circle_ring.add_texture("bump_texture", bump_texture, GL_TEXTURE_2D);
+    GLuint const diffuse_texture = bonobo::loadTexture2D("fieldstone_diffuse.png");
+    circle_ring.add_texture("diffuse_texture", diffuse_texture, GL_TEXTURE_2D);
 
     auto sphere_node = Node();
     sphere_node.set_geometry(sphere_shape);
@@ -209,13 +213,13 @@ edaf80::Assignment3::run() {
             circle_ring.set_program(&diffuse_shader, set_uniforms);
         }
         if (inputHandler.GetKeycodeState(GLFW_KEY_3) & JUST_PRESSED) {
-            circle_ring.set_program(&normal_shader, set_uniforms);
+            circle_ring.set_program(&normal_map_shader, phong_set_uniforms);
         }
         if (inputHandler.GetKeycodeState(GLFW_KEY_4) & JUST_PRESSED) {
             circle_ring.set_program(&texcoord_shader, set_uniforms);
         }
         if (inputHandler.GetKeycodeState(GLFW_KEY_5) & JUST_PRESSED) {
-            circle_ring.set_program(&normal_map_shader, set_uniforms);
+            circle_ring.set_program(&cube_map_shader, set_uniforms);
             sphere_node.set_program(&cube_map_shader, set_uniforms);
         }
         if (inputHandler.GetKeycodeState(GLFW_KEY_Z) & JUST_PRESSED) {

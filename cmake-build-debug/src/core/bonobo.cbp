@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6"/>
+	<Project>
+		<Option title="bonobo"/>
+		<Option makefile_is_custom="1"/>
+		<Option compiler="gcc"/>
+		<Option virtualFolders="CMake Files\;CMake Files\CMake\;CMake Files\dependencies\;CMake Files\dependencies\assimp-install\;CMake Files\dependencies\assimp-install\lib\;CMake Files\dependencies\assimp-install\lib\cmake\;CMake Files\dependencies\assimp-install\lib\cmake\assimp-4.1\;CMake Files\dependencies\imgui-install\;CMake Files\dependencies\imgui-install\lib\;CMake Files\dependencies\imgui-install\lib\cmake\;CMake Files\dependencies\imgui-install\lib\cmake\imgui\;CMake Files\..\;CMake Files\..\..\;CMake Files\..\..\..\;CMake Files\..\..\..\..\;CMake Files\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\;CMake Files\..\..\..\..\..\..\usr\;CMake Files\..\..\..\..\..\..\usr\lib\;CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\;CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\;CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\;CMake Files\..\code\;CMake Files\..\code\dependencies\;CMake Files\..\code\dependencies\glm-build\;CMake Files\src\;CMake Files\src\core\;CMake Files\src\external\;CMake Files\src\EDAF80\;CMake Files\src\EDAN35\;"/>
+		<Build>
+			<Target title="all">
+				<Option working_dir="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core"/>
+				<Option type="4"/>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bonobo">
+				<Option output="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/libbonobo.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DGLFW_DLL"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/assimp-install/include"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/external"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/imgui-install/include"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/code/dependencies/glm-source"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 bonobo"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+			<Target title="bonobo/fast">
+				<Option output="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/libbonobo.a" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core"/>
+				<Option object_output="./"/>
+				<Option type="2"/>
+				<Option compiler="gcc"/>
+				<Compiler>
+					<Add option="-DGLFW_DLL"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/assimp-install/include"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/external"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/imgui-install/include"/>
+					<Add directory="/home/lnxturing/Desktop/School/Datorgrafik/code/dependencies/glm-source"/>
+					<Add directory="/usr/include/c++/7"/>
+					<Add directory="/usr/include/x86_64-linux-gnu/c++/7"/>
+					<Add directory="/usr/include/c++/7/backward"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include"/>
+					<Add directory="/usr/local/include"/>
+					<Add directory="/usr/lib/gcc/x86_64-linux-gnu/7/include-fixed"/>
+					<Add directory="/usr/include/x86_64-linux-gnu"/>
+					<Add directory="/usr/include"/>
+				</Compiler>
+				<MakeCommands>
+					<Build command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 bonobo/fast"/>
+					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j8 -f &quot;/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/cmake-build-debug/src/core/Makefile&quot;  VERBOSE=1 clean"/>
+				</MakeCommands>
+			</Target>
+		</Build>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/Bonobo.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/Bonobo.h">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/GLStateInspection.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/GLStateInspection.h">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/GLStateInspectionView.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/GLStateInspectionView.h">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/InputHandler.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/InputHandler.h">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/Log.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/Log.h">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/LogView.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/LogView.h">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/Misc.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/Misc.h">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/ShaderProgramManager.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/ShaderProgramManager.hpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/Types.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/Types.h">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/WindowManager.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/WindowManager.hpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/helpers.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/helpers.hpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/node.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/node.hpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/opengl.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/opengl.hpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/various.cpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/various.hpp">
+			<Option target="bonobo"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/CMake/InstallAssimp.cmake">
+			<Option virtualFolder="CMake Files\CMake\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/CMake/InstallGLFW.cmake">
+			<Option virtualFolder="CMake Files\CMake\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/CMake/InstallGLM.cmake">
+			<Option virtualFolder="CMake Files\CMake\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/CMake/InstallImGui.cmake">
+			<Option virtualFolder="CMake Files\CMake\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/CMake/InstallTinyFileDialogs.cmake">
+			<Option virtualFolder="CMake Files\CMake\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/CMake/RetrieveResourceArchive.cmake">
+			<Option virtualFolder="CMake Files\CMake\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/assimp-install/lib/cmake/assimp-4.1/assimp-config-version.cmake">
+			<Option virtualFolder="CMake Files\dependencies\assimp-install\lib\cmake\assimp-4.1\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/assimp-install/lib/cmake/assimp-4.1/assimp-config.cmake">
+			<Option virtualFolder="CMake Files\dependencies\assimp-install\lib\cmake\assimp-4.1\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/imgui-install/lib/cmake/imgui/imguiConfig.cmake">
+			<Option virtualFolder="CMake Files\dependencies\imgui-install\lib\cmake\imgui\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/imgui-install/lib/cmake/imgui/imguiConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\dependencies\imgui-install\lib\cmake\imgui\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/imgui-install/lib/cmake/imgui/imguiTargets-release.cmake">
+			<Option virtualFolder="CMake Files\dependencies\imgui-install\lib\cmake\imgui\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/dependencies/imgui-install/lib/cmake/imgui/imguiTargets.cmake">
+			<Option virtualFolder="CMake Files\dependencies\imgui-install\lib\cmake\imgui\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Config.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3ConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Targets-none.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/../../../../../../usr/lib/x86_64-linux-gnu/cmake/glfw3/glfw3Targets.cmake">
+			<Option virtualFolder="CMake Files\..\..\..\..\..\..\usr\lib\x86_64-linux-gnu\cmake\glfw3\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/../code/dependencies/glm-build/glmConfig.cmake">
+			<Option virtualFolder="CMake Files\..\code\dependencies\glm-build\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/../code/dependencies/glm-build/glmConfigVersion.cmake">
+			<Option virtualFolder="CMake Files\..\code\dependencies\glm-build\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/../code/dependencies/glm-build/glmTargets.cmake">
+			<Option virtualFolder="CMake Files\..\code\dependencies\glm-build\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\core\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/core/config.hpp.in">
+			<Option virtualFolder="CMake Files\src\core\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/external/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\external\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/EDAF80/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\EDAF80\"/>
+		</Unit>
+		<Unit filename="/home/lnxturing/Desktop/School/Datorgrafik/EDAF80_Labs/src/EDAN35/CMakeLists.txt">
+			<Option virtualFolder="CMake Files\src\EDAN35\"/>
+		</Unit>
+	</Project>
+</CodeBlocks_project_file>
