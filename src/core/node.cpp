@@ -159,3 +159,7 @@ Node::get_transform() const
 
 	return translating * rotating * scaling;
 }
+
+glm::vec3 Node::get_translation() const {
+	return _translation;
+}
