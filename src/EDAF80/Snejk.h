@@ -13,6 +13,7 @@ class Snejk {
 public:
     Snejk(GLuint const* const program, std::function<void (GLuint)> const& set_uniforms, bonobo::mesh_data const& shape);
     void render(glm::mat4 const& world_to_clip);
+    void handle_input(InputHandler inputHandler);
 };
 
 
