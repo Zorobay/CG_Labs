@@ -22,11 +22,11 @@ edaf80::Assignment5::Assignment5() :
         mCamera(0.5f * glm::half_pi<float>(),
                 static_cast<float>(config::resolution_x) / static_cast<float>(config::resolution_y),
                 0.01f, 1000.0f),
-        inputHandler(), mWindowManager(), window(nullptr)
-{
+        inputHandler(), mWindowManager(), window(nullptr) {
     Log::View::Init();
 
-    WindowManager::WindowDatum window_datum{ inputHandler, mCamera, config::resolution_x, config::resolution_y, 0, 0, 0, 0};
+    WindowManager::WindowDatum window_datum{inputHandler, mCamera, config::resolution_x, config::resolution_y, 0, 0, 0,
+                                            0};
 
     window = mWindowManager.CreateWindow("EDAF80: Assignment 5", window_datum, config::msaa_rate);
     if (window == nullptr) {
@@ -35,14 +35,19 @@ edaf80::Assignment5::Assignment5() :
     }
 }
 
-edaf80::Assignment5::~Assignment5()
-{
+edaf80::Assignment5::~Assignment5() {
     Log::View::Destroy();
 }
 
 void
-edaf80::Assignment5::run()
-{
+edaf80::Assignment5::run() {
+
+    // Load the sphere geometry
+    auto sphere_shape = parametric_shapes::createSphere(20, 20, 1.0f);
+    if (sphere_shape.vao == 0u) {
+        LogError("Failed to retrieve the circle ring mesh");
+        return;
+    }
     // Set up the camera
     mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 10.0f, 0.0f));
     mCamera.mMouseSensitivity = 0.003f;
@@ -51,8 +56,8 @@ edaf80::Assignment5::run()
     // Create the shader programs
     ShaderProgramManager program_manager;
     GLuint fallback_shader = 0u;
-    program_manager.CreateAndRegisterProgram({ { ShaderType::vertex, "EDAF80/fallback.vert" },
-                                               { ShaderType::fragment, "EDAF80/fallback.frag" } },
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/fallback.vert"},
+                                              {ShaderType::fragment, "EDAF80/fallback.frag"}},
                                              fallback_shader);
     if (fallback_shader == 0u) {
         LogError("Failed to load fallback shader");
@@ -61,12 +66,12 @@ edaf80::Assignment5::run()
 
     GLuint blinn_phong_normal_shader = 0u;
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phon_normal.vert"},
-                                              {ShaderType::fragment, "EDAF80/blinn_phong_normal.frag"}}, blinn_phong_normal_shader);
+                                              {ShaderType::fragment, "EDAF80/blinn_phong_normal.frag"}},
+                                             blinn_phong_normal_shader);
     if (blinn_phong_normal_shader == 0u) {
         LogError("Failed to load normal map shader");
     }
 
-    // Create uniforms
     auto light_position = glm::vec3(-2.0f, 4.0f, 2.0f);
     auto const set_uniforms = [&light_position](GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
@@ -93,17 +98,8 @@ edaf80::Assignment5::run()
     // Todo: Load your geometry
     //
 
-    auto quad_shape = parametric_shapes::createQuad(50, 50, 5u);
-    auto sphere_shape = parametric_shapes::createSphere(20, 20, 1.0f);
-    if (quad_shape.vao == 0u || sphere_shape.vao == 0) {
-        LogError("Failed to retrieve the circle ring mesh");
-        return;
-    }
-
     // Create snake
     auto snake = Snejk(&blinn_phong_normal_shader, phong_set_uniforms, sphere_shape);
-
-
 
     glEnable(GL_DEPTH_TEST);
 
@@ -131,7 +127,7 @@ edaf80::Assignment5::run()
         }
         fpsSamples++;
 
-        auto& io = ImGui::GetIO();
+        auto &io = ImGui::GetIO();
         inputHandler.SetUICapture(io.WantCaptureMouse, io.WantCaptureKeyboard);
 
         glfwPollEvents();
@@ -157,8 +153,6 @@ edaf80::Assignment5::run()
         // Todo: If you need to handle inputs, you can do it here
         //
         snake.handle_input(inputHandler);
-
-
 
         int framebuffer_width, framebuffer_height;
         glfwGetFramebufferSize(window, &framebuffer_width, &framebuffer_height);
@@ -193,13 +187,12 @@ edaf80::Assignment5::run()
     }
 }
 
-int main()
-{
+int main() {
     Bonobo::Init();
     try {
         edaf80::Assignment5 assignment5;
         assignment5.run();
-    } catch (std::runtime_error const& e) {
+    } catch (std::runtime_error const &e) {
         LogError(e.what());
     }
     Bonobo::Destroy();
