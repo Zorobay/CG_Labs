@@ -18,6 +18,8 @@
 #include <stdexcept>
 #include <glm/gtc/type_ptr.hpp>
 
+#include <random>
+
 edaf80::Assignment5::Assignment5() :
         mCamera(0.5f * glm::half_pi<float>(),
                 static_cast<float>(config::resolution_x) / static_cast<float>(config::resolution_y),
@@ -39,6 +41,27 @@ edaf80::Assignment5::~Assignment5() {
     Log::View::Destroy();
 }
 
+void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
+                                        std::function<void(GLuint)> const &set_uniforms, size_t amount) {
+    std::random_device rd; // Seed
+    std::mt19937 ran_gen(rd()); // Random generator
+    std::uniform_int_distribution<int> dist(-world_radi, world_radi);
+
+    for (size_t i = 0; i < amount; i++) {
+        float x_pos = dist(ran_gen);
+        std::cout << x_pos;
+        float z_pos = dist(ran_gen);
+        std::cout << ", " << z_pos << "\n";
+
+        auto food_node = Node();
+        food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
+        food_node.set_scaling(glm::vec3(food_radi));
+        food_node.set_geometry(shape);
+        food_node.set_program(program, set_uniforms);
+        food.push_back(food_node);
+    }
+}
+
 void
 edaf80::Assignment5::run() {
 
@@ -49,7 +72,7 @@ edaf80::Assignment5::run() {
         return;
     }
     // Set up the camera
-    mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 10.0f, 5.0f));
+    mCamera.mWorld.SetTranslate(glm::vec3(0.0f, camera_y_disp, camera_z_disp));
     mCamera.mMouseSensitivity = 0.003f;
     mCamera.mMovementSpeed = 0.025;
 
@@ -102,11 +125,6 @@ edaf80::Assignment5::run() {
     };
 
 
-    //
-    // Todo: Load your geometry
-    //
-
-
     // Create snake
     auto snake = Snejk(&blinn_phong_normal_shader, phong_set_uniforms, sphere_shape);
     auto node = Node();
@@ -114,6 +132,9 @@ edaf80::Assignment5::run() {
     node.set_program(&fallback_shader, set_uniforms);
     node.translate(glm::vec3(-3, 0, 0));
     node.set_scaling(glm::vec3(0.5f));
+
+    // Create food nodes
+    generate_food(sphere_shape, &fallback_shader, set_uniforms, 20);
 
     // Create skybox
     std::string skybox = "opensea";
@@ -123,9 +144,8 @@ edaf80::Assignment5::run() {
     auto skybox_node = Node();
     skybox_node.set_geometry(sphere_shape);
     skybox_node.set_program(&cube_map_shader, set_uniforms);
-    skybox_node.set_scaling(glm::vec3(20.0f));
+    skybox_node.set_scaling(glm::vec3(100.0f));
     skybox_node.add_texture(skybox + "_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
-
 
 
     glEnable(GL_DEPTH_TEST);
@@ -160,6 +180,8 @@ edaf80::Assignment5::run() {
         glfwPollEvents();
         inputHandler.Advance();
         mCamera.Update(ddeltatime, inputHandler);
+        camera_position = mCamera.mWorld.GetTranslation();
+
 
         if (inputHandler.GetKeycodeState(GLFW_KEY_F3) & JUST_RELEASED)
             show_logs = !show_logs;
@@ -193,11 +215,23 @@ edaf80::Assignment5::run() {
             // Todo: Render all your geometry here.
             //
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
-            node.render(mCamera.GetWorldToClipMatrix(), node.get_transform());
+            //node.render(mCamera.GetWorldToClipMatrix(), node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
-            mCamera.mWorld.LookAt(snake.get_position());
-            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(0,10,5));
 
+            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(0, camera_y_disp, camera_z_disp));
+            mCamera.mWorld.LookAt(snake.get_position());
+
+            // Render food
+            for (size_t i = 0; i < food.size(); i++) {
+                Node f = food[i];
+                // If food is eaten, remove it and make snake longer
+                if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())){
+                    snake.add_node();
+                    food.erase(food.begin() + i);
+                }else{
+                    f.render(mCamera.GetWorldToClipMatrix(), f.get_transform());
+                }
+            }
         }
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -216,6 +250,7 @@ edaf80::Assignment5::run() {
         lastTime = nowTime;
     }
 }
+
 
 int main() {
     Bonobo::Init();
