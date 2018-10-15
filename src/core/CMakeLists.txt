@@ -23,7 +23,7 @@ add_library (${PROJECT_NAME}
 	"node.hpp"
 	"helpers.cpp"
 	"helpers.hpp"
-)
+        ../EDAF80/Snejk.cpp ../EDAF80/Snejk.h)
 
 target_include_directories (
 	${PROJECT_NAME}
