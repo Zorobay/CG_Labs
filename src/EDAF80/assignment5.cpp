@@ -47,6 +47,7 @@ edaf80::Assignment5::run()
     mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 10.0f, 6.0f));
     mCamera.mMouseSensitivity = 0.003f;
     mCamera.mMovementSpeed = 0.025;
+    mCamera.mWorld.LookAt(glm::vec3(0,0,0));
 
     // Create the shader programs
     ShaderProgramManager program_manager;
@@ -75,7 +76,7 @@ edaf80::Assignment5::run()
     //
 
     auto quad_shape = parametric_shapes::createQuad(50, 50, 5u);
-    auto sphere_shape = parametric_shapes::createSphere(20, 20, 1.0f);
+    auto sphere_shape = parametric_shapes::createSphere(20, 20, 2.0f);
     if (quad_shape.vao == 0u || sphere_shape.vao == 0) {
         LogError("Failed to retrieve the circle ring mesh");
         return;
