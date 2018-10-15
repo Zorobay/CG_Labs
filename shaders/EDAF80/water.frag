@@ -62,5 +62,5 @@ void main()
     vec3 refraction = texture(reflection_cube_map, Re).xyz;
     vec4 refraction_color = vec4(refraction * (1 - fastFresnel), 1);
 
-	frag_color = water_color + reflection_color /* fastFresnel + refraction_color*/;
+	frag_color = water_color + reflection_color * fastFresnel + refraction_color;
 }

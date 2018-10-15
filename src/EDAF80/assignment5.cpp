@@ -1,52 +1,48 @@
 #include "assignment5.hpp"
-#include "interpolation.hpp"
-#include "parametric_shapes.hpp"
 
 #include "config.hpp"
 #include "core/Bonobo.h"
 #include "core/FPSCamera.h"
+#include "core/helpers.hpp"
 #include "core/Log.h"
 #include "core/LogView.h"
 #include "core/Misc.h"
-#include "core/node.hpp"
 #include "core/ShaderProgramManager.hpp"
+#include "Snejk.h"
+#include "parametric_shapes.hpp"
 
 #include <imgui.h>
 #include <external/imgui_impl_glfw_gl3.h>
-#include <glm/glm.hpp>
-#include <glm/gtc/matrix_transform.hpp>
-#include <glm/gtc/type_ptr.hpp>
 #include <tinyfiledialogs.h>
 
-#include <cstdlib>
 #include <stdexcept>
+#include <glm/gtc/type_ptr.hpp>
 
 edaf80::Assignment5::Assignment5() :
-	mCamera(0.5f * glm::half_pi<float>(),
-	        static_cast<float>(config::resolution_x) / static_cast<float>(config::resolution_y),
-	        0.01f, 1000.0f),
-	inputHandler(), mWindowManager(), window(nullptr)
+        mCamera(0.5f * glm::half_pi<float>(),
+                static_cast<float>(config::resolution_x) / static_cast<float>(config::resolution_y),
+                0.01f, 1000.0f),
+        inputHandler(), mWindowManager(), window(nullptr)
 {
-	Log::View::Init();
+    Log::View::Init();
 
-	WindowManager::WindowDatum window_datum{ inputHandler, mCamera, config::resolution_x, config::resolution_y, 0, 0, 0, 0};
+    WindowManager::WindowDatum window_datum{ inputHandler, mCamera, config::resolution_x, config::resolution_y, 0, 0, 0, 0};
 
-	window = mWindowManager.CreateWindow("EDAF80: Assignment 5", window_datum, config::msaa_rate);
-	if (window == nullptr) {
-		Log::View::Destroy();
-		throw std::runtime_error("Failed to get a window: aborting!");
-	}
+    window = mWindowManager.CreateWindow("EDAF80: Assignment 5", window_datum, config::msaa_rate);
+    if (window == nullptr) {
+        Log::View::Destroy();
+        throw std::runtime_error("Failed to get a window: aborting!");
+    }
 }
 
 edaf80::Assignment5::~Assignment5()
 {
-	Log::View::Destroy();
+    Log::View::Destroy();
 }
 
 void
 edaf80::Assignment5::run()
 {
-	// Load the sphere geometry
 
 	// Set up the camera
 	mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 0.0f, 6.0f));
@@ -158,12 +154,12 @@ edaf80::Assignment5::run()
 
 int main()
 {
-	Bonobo::Init();
-	try {
-		edaf80::Assignment5 assignment5;
-		assignment5.run();
-	} catch (std::runtime_error const& e) {
-		LogError(e.what());
-	}
-	Bonobo::Destroy();
+    Bonobo::Init();
+    try {
+        edaf80::Assignment5 assignment5;
+        assignment5.run();
+    } catch (std::runtime_error const& e) {
+        LogError(e.what());
+    }
+    Bonobo::Destroy();
 }
