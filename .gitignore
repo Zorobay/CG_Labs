@@ -3,6 +3,7 @@ build/
 Debug/
 Release/
 ipch/
+cmake-build-debug
 
 # Dependencies folder
 dependencies/
