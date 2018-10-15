@@ -1,18 +1,24 @@
 #include "assignment5.hpp"
+#include "interpolation.hpp"
+#include "parametric_shapes.hpp"
 
 #include "config.hpp"
 #include "core/Bonobo.h"
 #include "core/FPSCamera.h"
-#include "core/helpers.hpp"
 #include "core/Log.h"
 #include "core/LogView.h"
 #include "core/Misc.h"
+#include "core/node.hpp"
 #include "core/ShaderProgramManager.hpp"
 
 #include <imgui.h>
 #include <external/imgui_impl_glfw_gl3.h>
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp>
+#include <glm/gtc/type_ptr.hpp>
 #include <tinyfiledialogs.h>
 
+#include <cstdlib>
 #include <stdexcept>
 
 edaf80::Assignment5::Assignment5() :
@@ -40,6 +46,15 @@ edaf80::Assignment5::~Assignment5()
 void
 edaf80::Assignment5::run()
 {
+	// Load the sphere geometry
+	auto circle_ring_shape = parametric_shapes::createCircleRing(4u, 60u, 1.0f, 2.0f);
+	auto sphere_shape = parametric_shapes::createSphere(20, 20, 100.0f);
+	auto quad_shape = parametric_shapes::createQuad(1, 1, 0);
+	if (circle_ring_shape.vao == 0u || sphere_shape.vao == 0u || quad_shape.vao == 0u) {
+		LogError("Failed to retrieve the circle ring mesh");
+		return;
+	}
+
 	// Set up the camera
 	mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 0.0f, 6.0f));
 	mCamera.mMouseSensitivity = 0.003f;

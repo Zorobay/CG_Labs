@@ -56,8 +56,8 @@ void
 edaf80::Assignment3::run() {
     // Load the sphere geometry
     auto circle_ring_shape = parametric_shapes::createCircleRing(4u, 60u, 1.0f, 2.0f);
-    auto sphere_shape = parametric_shapes::createSphere(10, 10, 100.0f);
-    auto quad_shape = parametric_shapes::createQuad(1, 1);
+    auto sphere_shape = parametric_shapes::createSphere(20, 20, 100.0f);
+    auto quad_shape = parametric_shapes::createQuad(1, 1, 0);
     if (circle_ring_shape.vao == 0u || sphere_shape.vao == 0u || quad_shape.vao == 0u) {
         LogError("Failed to retrieve the circle ring mesh");
         return;
@@ -165,7 +165,10 @@ edaf80::Assignment3::run() {
                                                   skybox + "/negy.png", skybox + "/posz.png", skybox + "/negz.png",
                                                   true);
     auto roof_normal_map = bonobo::loadTexture2D("fieldstone_bump.png");
+    auto roof_texture = bonobo::loadTexture2D("fieldstone_diffuse.png");
     sphere_node.add_texture(skybox + "_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
+    circle_ring.add_texture("normal_map", roof_normal_map, GL_TEXTURE_2D);
+    circle_ring.add_texture("diffuse_texture", roof_texture, GL_TEXTURE_2D);
 
     glEnable(GL_DEPTH_TEST);
 
@@ -245,7 +248,9 @@ edaf80::Assignment3::run() {
                 break;
         }
 
+        mCamera.mWorld.LookAt(glm::vec3(0,0,0));
         camera_position = mCamera.mWorld.GetTranslation();
+
 
         int framebuffer_width, framebuffer_height;
         glfwGetFramebufferSize(window, &framebuffer_width, &framebuffer_height);

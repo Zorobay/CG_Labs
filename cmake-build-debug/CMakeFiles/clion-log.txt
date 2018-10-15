@@ -1,0 +1,20 @@
+/snap/clion/39/bin/cmake/linux/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" /home/sebastian/School/EDAF80-Labs/code
+CMake Error at CMakeLists.txt:63 (find_package):
+  By not providing "Findimgui.cmake" in CMAKE_MODULE_PATH this project has
+  asked CMake to find a package configuration file provided by "imgui", but
+  CMake did not find one.
+
+  Could not find a package configuration file provided by "imgui" (requested
+  version 1.51) with any of the following names:
+
+    imguiConfig.cmake
+    imgui-config.cmake
+
+  Add the installation prefix of "imgui" to CMAKE_PREFIX_PATH or set
+  "imgui_DIR" to a directory containing one of the above files.  If "imgui"
+  provides a separate development package or SDK, be sure it has been
+  installed.
+
+
+-- Configuring incomplete, errors occurred!
+See also "/home/sebastian/School/EDAF80-Labs/code/cmake-build-debug/CMakeFiles/CMakeOutput.log".
