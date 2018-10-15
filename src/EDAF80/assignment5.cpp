@@ -44,10 +44,9 @@ void
 edaf80::Assignment5::run()
 {
     // Set up the camera
-    mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 6.0f, 6.0f));
+    mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 10.0f, 0.0f));
     mCamera.mMouseSensitivity = 0.003f;
     mCamera.mMovementSpeed = 0.025;
-    mCamera.mWorld.LookAt(glm::vec3(0,0,0));
 
     // Create the shader programs
     ShaderProgramManager program_manager;
@@ -60,16 +59,35 @@ edaf80::Assignment5::run()
         return;
     }
 
+    GLuint blinn_phong_normal_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phon_normal.vert"},
+                                              {ShaderType::fragment, "EDAF80/blinn_phong_normal.frag"}}, blinn_phong_normal_shader);
+    if (blinn_phong_normal_shader == 0u) {
+        LogError("Failed to load normal map shader");
+    }
+
     // Create uniforms
     auto light_position = glm::vec3(-2.0f, 4.0f, 2.0f);
     auto const set_uniforms = [&light_position](GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
     };
 
-    //
-    // Todo: Insert the creation of other shader programs.
-    //       (Check how it was done in assignment 3.)
-    //
+    // Blinn phong uniforms
+    auto camera_position = mCamera.mWorld.GetTranslation();
+    auto ambient = glm::vec3(0.2f, 0.2f, 0.2f);
+    auto diffuse = glm::vec3(0.7f, 0.2f, 0.4f);
+    auto specular = glm::vec3(1.0f, 1.0f, 1.0f);
+    auto shininess = 1.0f;
+    auto const phong_set_uniforms = [&light_position, &camera_position, &ambient, &diffuse, &specular, &shininess](
+            GLuint program) {
+        glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
+        glUniform3fv(glGetUniformLocation(program, "camera_position"), 1, glm::value_ptr(camera_position));
+        glUniform3fv(glGetUniformLocation(program, "ambient"), 1, glm::value_ptr(ambient));
+        glUniform3fv(glGetUniformLocation(program, "diffuse"), 1, glm::value_ptr(diffuse));
+        glUniform3fv(glGetUniformLocation(program, "specular"), 1, glm::value_ptr(specular));
+        glUniform1f(glGetUniformLocation(program, "shininess"), shininess);
+    };
+
 
     //
     // Todo: Load your geometry
@@ -82,7 +100,11 @@ edaf80::Assignment5::run()
         return;
     }
 
-    auto snake = Snejk(&fallback_shader, set_uniforms, sphere_shape);
+    // Create snake
+    auto snake = Snejk(&blinn_phong_normal_shader, phong_set_uniforms, sphere_shape);
+
+
+
     glEnable(GL_DEPTH_TEST);
 
     // Enable face culling to improve performance:
@@ -134,7 +156,7 @@ edaf80::Assignment5::run()
         //
         // Todo: If you need to handle inputs, you can do it here
         //
-
+        snake.handle_input(inputHandler);
 
 
 
@@ -149,7 +171,9 @@ edaf80::Assignment5::run()
             //
             // Todo: Render all your geometry here.
             //
-            snake.render(mCamera.GetWorldToClipMatrix());
+            snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
+            mCamera.mWorld.LookAt(snake.get_position());
+
         }
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
