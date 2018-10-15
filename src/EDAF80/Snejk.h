@@ -11,8 +11,8 @@
 #include "core/InputHandler.h"
 
 // Contants
-const float move_speed = 0.05;
-const float turn_speed = 0.01;
+const float move_speed = 0.002;
+const float turn_speed = 0.05;
 
 class Snejk {
 public:
@@ -25,7 +25,7 @@ public:
 private:
     GLuint const* _shader;
     std::function<void (GLuint)> _set_uniforms;
-
+    bonobo::mesh_data const* _shape;
 };
 
 

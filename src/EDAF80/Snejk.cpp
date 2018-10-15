@@ -5,7 +5,7 @@
 #include <core/node.hpp>
 #include <core/helpers.hpp>
 #include "Snejk.h"
-//#include "glm/gtx/rotate_vector.hpp"
+#include "glm/gtx/rotate_vector.hpp"
 
 auto head_node = Node();
 std::vector<Node> nodes = {head_node};
@@ -19,16 +19,17 @@ Snejk::Snejk(GLuint const* const shader, std::function<void (GLuint)> const& set
 
     _shader = shader;
     _set_uniforms = set_uniforms;
+    _shape = &shape;
 
     head_node.set_program(_shader, _set_uniforms);
-    head_node.set_geometry(shape);
+    head_node.set_geometry(*_shape);
     head_node.set_translation(head_position);
     //head_node.add_texture("normal_map", texture_bump, GL_TEXTURE_2D);
     //head_node.add_texture("diffuse_texture", texture_diffuse, GL_TEXTURE_2D);
 
     Node body_node = Node();
-    body_node.set_geometry(shape);
-    body_node.set_program(_shader, set_uniforms);
+    body_node.set_geometry(*_shape);
+    body_node.set_program(_shader, _set_uniforms);
     body_node.set_scaling(glm::vec3(0.4f));
     body_node.translate(glm::vec3(2, 0, 0));
 }
@@ -43,7 +44,7 @@ void Snejk::render(glm::mat4 const& world_to_clip, const float delta_time) {
 
 void Snejk::handle_input(InputHandler inputHandler) {
     if (inputHandler.GetKeycodeState(GLFW_KEY_LEFT) & JUST_PRESSED){ //Turn left
-        //move_direction = glm::normalize(glm::rotateY(move_direction, 1.0f));
+        move_direction = glm::normalize(glm::rotateY(move_direction, 1.0f));
     }
 }
 

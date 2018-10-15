@@ -100,7 +100,9 @@ edaf80::Assignment5::run() {
 
     // Create snake
     auto snake = Snejk(&blinn_phong_normal_shader, phong_set_uniforms, sphere_shape);
-
+    auto node = Node();
+    node.set_geometry(sphere_shape);
+    node.set_program(&fallback_shader, set_uniforms);
     glEnable(GL_DEPTH_TEST);
 
     // Enable face culling to improve performance:
@@ -165,8 +167,10 @@ edaf80::Assignment5::run() {
             //
             // Todo: Render all your geometry here.
             //
+            node.render(mCamera.GetWorldToClipMatrix(), node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
             mCamera.mWorld.LookAt(snake.get_position());
+            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(0,10,0));
 
         }
 
