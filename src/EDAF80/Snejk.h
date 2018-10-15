@@ -7,12 +7,13 @@
 
 #include "core/Misc.h"
 #include "core/node.hpp"
+#include "core/helpers.hpp"
 #include "core/ShaderProgramManager.hpp"
 #include "core/InputHandler.h"
 
 // Contants
 const float move_speed = 0.002;
-const float turn_speed = 0.05;
+const float turn_speed = 0.02;
 
 class Snejk {
 public:
@@ -25,7 +26,14 @@ public:
 private:
     GLuint const* _shader;
     std::function<void (GLuint)> _set_uniforms;
-    bonobo::mesh_data const* _shape;
+    bonobo::mesh_data _shape;
+    GLuint _texture_bump = bonobo::loadTexture2D("fieldstone_bump.png");
+    GLuint _texture_diffuse = bonobo::loadTexture2D("fieldstone_diffuse.png");
+    std::vector<Node> _nodes;
+    std::vector<glm::vec3> _positions;
+    std::vector<glm::vec3> _directions;
+    size_t _counter = 0;
+    float _rotation = glm::half_pi<float>();
 };
 
 

@@ -49,7 +49,7 @@ edaf80::Assignment5::run() {
         return;
     }
     // Set up the camera
-    mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 10.0f, 0.0f));
+    mCamera.mWorld.SetTranslate(glm::vec3(0.0f, 10.0f, 5.0f));
     mCamera.mMouseSensitivity = 0.003f;
     mCamera.mMovementSpeed = 0.025;
 
@@ -62,6 +62,14 @@ edaf80::Assignment5::run() {
     if (fallback_shader == 0u) {
         LogError("Failed to load fallback shader");
         return;
+    }
+
+    GLuint cube_map_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/cubemap.vert"},
+                                              {ShaderType::fragment, "EDAF80/cubemap.frag"}},
+                                             cube_map_shader);
+    if (cube_map_shader == 0u) {
+        LogError("Failed to load cubemap shader");
     }
 
     GLuint blinn_phong_normal_shader = 0u;
@@ -98,11 +106,28 @@ edaf80::Assignment5::run() {
     // Todo: Load your geometry
     //
 
+
     // Create snake
     auto snake = Snejk(&blinn_phong_normal_shader, phong_set_uniforms, sphere_shape);
     auto node = Node();
     node.set_geometry(sphere_shape);
     node.set_program(&fallback_shader, set_uniforms);
+    node.translate(glm::vec3(-3, 0, 0));
+    node.set_scaling(glm::vec3(0.5f));
+
+    // Create skybox
+    std::string skybox = "opensea";
+    auto cube_map_id = bonobo::loadTextureCubeMap(skybox + "/posx.png", skybox + "/negx.png", skybox + "/posy.png",
+                                                  skybox + "/negy.png", skybox + "/posz.png", skybox + "/negz.png",
+                                                  true);
+    auto skybox_node = Node();
+    skybox_node.set_geometry(sphere_shape);
+    skybox_node.set_program(&cube_map_shader, set_uniforms);
+    skybox_node.set_scaling(glm::vec3(20.0f));
+    skybox_node.add_texture(skybox + "_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
+
+
+
     glEnable(GL_DEPTH_TEST);
 
     // Enable face culling to improve performance:
@@ -167,10 +192,11 @@ edaf80::Assignment5::run() {
             //
             // Todo: Render all your geometry here.
             //
+            skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
             node.render(mCamera.GetWorldToClipMatrix(), node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
             mCamera.mWorld.LookAt(snake.get_position());
-            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(0,10,0));
+            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(0,10,5));
 
         }
 
