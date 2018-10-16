@@ -182,7 +182,6 @@ edaf80::Assignment5::run() {
         mCamera.Update(ddeltatime, inputHandler);
         camera_position = mCamera.mWorld.GetTranslation();
 
-
         if (inputHandler.GetKeycodeState(GLFW_KEY_F3) & JUST_RELEASED)
             show_logs = !show_logs;
         if (inputHandler.GetKeycodeState(GLFW_KEY_F2) & JUST_RELEASED)
@@ -218,7 +217,7 @@ edaf80::Assignment5::run() {
             //node.render(mCamera.GetWorldToClipMatrix(), node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
 
-            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(0, camera_y_disp, camera_z_disp));
+            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(-snake.get_move_direction().x*10, camera_y_disp, -snake.get_move_direction().z*10));
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food
