@@ -26,6 +26,11 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     head_node.set_scaling(glm::vec3(_head_radi));
     head_node.add_texture("normal_map", _texture_bump, GL_TEXTURE_2D);
     head_node.add_texture("diffuse_texture", _texture_diffuse, GL_TEXTURE_2D);
+
+    for(int i = 0; i < 100; i++){
+        _positions.push_back(head_position);
+        _directions.push_back(move_direction);
+    }
 }
 
 void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {

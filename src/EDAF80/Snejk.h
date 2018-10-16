@@ -13,7 +13,7 @@
 
 // Contants
 const float move_speed = 0.005;
-const float turn_speed = 0.02;
+const float turn_speed = 0.005;
 
 class Snejk {
 public:
