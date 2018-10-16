@@ -64,6 +64,15 @@ void Snejk::handle_input(InputHandler inputHandler) {
         _rotation -= rotation_amount;
         move_direction = glm::normalize(glm::rotateY(move_direction, -rotation_amount));
     }
+    // Vim bindings
+    if (inputHandler.GetKeycodeState(GLFW_KEY_H) & PRESSED) { //Turn left
+        _rotation += rotation_amount;
+        move_direction = glm::normalize(glm::rotateY(move_direction, rotation_amount));
+    }
+    if (inputHandler.GetKeycodeState(GLFW_KEY_L) & PRESSED) { //Turn right
+        _rotation -= rotation_amount;
+        move_direction = glm::normalize(glm::rotateY(move_direction, -rotation_amount));
+    }
     if (inputHandler.GetKeycodeState(GLFW_KEY_N) & JUST_PRESSED) { //Add new body part
         add_node(_tail_radi);
     }
