@@ -10,10 +10,9 @@
 #include "core/helpers.hpp"
 #include "core/ShaderProgramManager.hpp"
 #include "core/InputHandler.h"
+#include <ctime>
 
-// Contants
-const float base_move_speed = 0.005;
-const float base_turn_speed = 0.005;
+
 
 class Snejk {
 public:
@@ -26,11 +25,11 @@ public:
     glm::vec3 get_move_direction();
     float get_rotation_y();
     float get_radius();
-
-
+    bool is_alive();
+    void speed_up();
 
 private:
-    bool isAlive();
+
     GLuint const* _shader;
     std::function<void (GLuint)> _set_uniforms;
     bonobo::mesh_data _shape;
@@ -46,6 +45,12 @@ private:
     size_t _tail_segment_offset = 30;
     float move_speed;
     float turn_speed;
+    const float base_move_speed = 0.005;
+    const float base_turn_speed = 0.006;
+
+    float speed_up_timer = 0.0f;
+    const float max_speed = base_move_speed * 2.0f;
+    bool is_sped_up = false;
 };
 
 

@@ -15,6 +15,7 @@ layout (location = 1) in vec3 normal;
 uniform mat4 vertex_model_to_world;
 uniform mat4 normal_model_to_world;
 uniform mat4 vertex_world_to_clip;
+uniform vec3 color;
 
 // This is the custom output of this shader. If you want to retrieve this data
 // from another shader further down the pipeline, you need to declare the exact

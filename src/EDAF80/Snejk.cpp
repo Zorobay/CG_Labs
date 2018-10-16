@@ -38,9 +38,15 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
 
 void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
 
-    // Check if dead
-    if (!isAlive()){
-        return;
+    // Handle speed up timer
+    if (is_sped_up) {
+        speed_up_timer += delta_time;
+
+        if (speed_up_timer > 5000) { // if more than 5 seconds passed
+            move_speed = base_move_speed;
+            speed_up_timer = 0;
+            is_sped_up = false;
+        }
     }
     // Move head
     head_position += move_direction * delta_time * move_speed;
@@ -117,7 +123,7 @@ void Snejk::add_node() {
 }
 
 // Function that tests for collision between head and tail
-bool Snejk::isAlive() {
+bool Snejk::is_alive() {
     for (Node n: _nodes) {
         if (_tail_radi + 1.0f > glm::distance(n.get_translation(), head_position)) {//distance of center < tail + head radi
             return false;
@@ -132,6 +138,12 @@ glm::vec3 Snejk::get_move_direction() {
 
 float Snejk::get_radius() {
     return _head_radi;
+}
+
+void Snejk::speed_up() {
+    speed_up_timer = 0.0f;
+    is_sped_up = true;
+    move_speed = max_speed;
 }
 
 

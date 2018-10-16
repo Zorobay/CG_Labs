@@ -42,7 +42,8 @@ edaf80::Assignment5::~Assignment5() {
 }
 
 void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
-                                        std::function<void(GLuint)> const &set_uniforms, size_t amount, glm::vec3 snek_pos) {
+                                        std::function<void(GLuint)> const &set_uniforms, size_t amount,
+                                        glm::vec3 snek_pos) {
     std::random_device rd; // Seed
     std::mt19937 ran_gen(rd()); // Random generator
     std::uniform_int_distribution<int> dist(-world_radi, world_radi);
@@ -51,7 +52,7 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
         float x_pos = dist(ran_gen);
         float z_pos = dist(ran_gen);
 
-        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3){
+        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3) {
             x_pos = dist(ran_gen);
             z_pos = dist(ran_gen);
             std::cout << "snake was too close, " << x_pos << ", " << z_pos << " is new position\n";
@@ -59,7 +60,7 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
 
         auto food_node = Node();
         food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
-        food_node.set_scaling(glm::vec3(food_radi));
+        food_node.set_scaling(glm::vec3(food_radi * 0.8));
         food_node.set_geometry(shape);
         food_node.set_program(program, set_uniforms);
         food.push_back(food_node);
@@ -95,8 +96,18 @@ edaf80::Assignment5::run() {
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/default.vert"},
                                               {ShaderType::fragment, "EDAF80/default.frag"}},
                                              default_shader);
-    if (default_shader == 0u)
+    if (default_shader == 0u) {
+        LogError("Failed to load default shader");
+        return;
+    }
+    GLuint diffuse_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/diffuse.vert"},
+                                              {ShaderType::fragment, "EDAF80/diffuse.frag"}},
+                                             diffuse_shader);
+    if (diffuse_shader == 0u){
         LogError("Failed to load diffuse shader");
+        return;
+    }
 
     GLuint cube_map_shader = 0u;
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/cubemap.vert"},
@@ -119,6 +130,12 @@ edaf80::Assignment5::run() {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
     };
 
+    auto color = glm::vec3(0.5, 0.3, 0.1);
+    auto const diffuse_uniforms = [&light_position, &color](GLuint program) {
+        glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
+        glUniform3fv(glGetUniformLocation(program, "color"), 1, glm::value_ptr(color));
+    };
+
     // Blinn phong uniforms
     auto camera_position = mCamera.mWorld.GetTranslation();
     auto ambient = glm::vec3(0.2f, 0.2f, 0.2f);
@@ -135,17 +152,11 @@ edaf80::Assignment5::run() {
         glUniform1f(glGetUniformLocation(program, "shininess"), shininess);
     };
 
-
     // Create snake
     auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape);
-    auto node = Node();
-    node.set_geometry(sphere_shape);
-    node.set_program(&fallback_shader, set_uniforms);
-    node.translate(glm::vec3(-3, 0, 0));
-    node.set_scaling(glm::vec3(0.5f));
 
     // Create food nodes
-    generate_food(sphere_shape, &fallback_shader, set_uniforms, 3, snake.get_position());
+    generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 20, snake.get_position());
 
     // Create skybox
     std::string skybox = "opensea";
@@ -155,17 +166,10 @@ edaf80::Assignment5::run() {
     auto skybox_node = Node();
     skybox_node.set_geometry(sphere_shape);
     skybox_node.set_program(&cube_map_shader, set_uniforms);
-    skybox_node.set_scaling(glm::vec3(100.0f));
+    skybox_node.set_scaling(glm::vec3(world_radi));
     skybox_node.add_texture(skybox + "_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
 
-
     glEnable(GL_DEPTH_TEST);
-
-    // Enable face culling to improve performance:
-    //glEnable(GL_CULL_FACE);
-    //glCullFace(GL_FRONT);
-    //glCullFace(GL_BACK);
-
 
     f64 ddeltatime;
     size_t fpsSamples = 0;
@@ -225,20 +229,26 @@ edaf80::Assignment5::run() {
             // Todo: Render all your geometry here.
             //
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
-            snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
+            if (snake.is_alive()){
+                snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
+            }
 
-            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(-snake.get_move_direction().x*10, camera_y_disp, -snake.get_move_direction().z*10));
+            mCamera.mWorld.SetTranslate(snake.get_position() +
+                                        glm::vec3(-snake.get_move_direction().x * 10, camera_y_disp,
+                                                  -snake.get_move_direction().z * 10));
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food
             for (size_t i = 0; i < food.size(); i++) {
                 Node f = food[i];
                 // If food is eaten, remove it and make snake longer
-                if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())){
+                if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())) {
                     snake.add_node();
+                    snake.speed_up();
                     food.erase(food.begin() + i);
-                    generate_food(sphere_shape, &fallback_shader, set_uniforms, 1, snake.get_position()); // Generate new food
-                }else{
+                    generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 1,
+                                  snake.get_position()); // Generate new food
+                } else {
                     f.render(mCamera.GetWorldToClipMatrix(), f.get_transform());
                 }
             }
