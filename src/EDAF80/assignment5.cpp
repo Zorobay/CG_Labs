@@ -87,6 +87,13 @@ edaf80::Assignment5::run() {
         return;
     }
 
+    GLuint default_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/default.vert"},
+                                              {ShaderType::fragment, "EDAF80/default.frag"}},
+                                             default_shader);
+    if (default_shader == 0u)
+        LogError("Failed to load diffuse shader");
+
     GLuint cube_map_shader = 0u;
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/cubemap.vert"},
                                               {ShaderType::fragment, "EDAF80/cubemap.frag"}},
@@ -126,7 +133,7 @@ edaf80::Assignment5::run() {
 
 
     // Create snake
-    auto snake = Snejk(&blinn_phong_normal_shader, phong_set_uniforms, sphere_shape);
+    auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape);
     auto node = Node();
     node.set_geometry(sphere_shape);
     node.set_program(&fallback_shader, set_uniforms);
@@ -217,7 +224,7 @@ edaf80::Assignment5::run() {
             //node.render(mCamera.GetWorldToClipMatrix(), node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
 
-            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(-snake.get_move_direction().x*10, camera_y_disp, -snake.get_move_direction().z*10));
+            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(10,8,10));//glm::vec3(-snake.get_move_direction().x*10, camera_y_disp, -snake.get_move_direction().z*10));
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food

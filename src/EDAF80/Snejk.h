@@ -12,7 +12,7 @@
 #include "core/InputHandler.h"
 
 // Contants
-const float move_speed = 0.005;
+const float base_move_speed = 0.005;
 const float turn_speed = 0.005;
 
 class Snejk {
@@ -35,7 +35,7 @@ private:
     std::function<void (GLuint)> _set_uniforms;
     bonobo::mesh_data _shape;
     GLuint _texture_bump = bonobo::loadTexture2D("fieldstone_bump.png");
-    GLuint _texture_diffuse = bonobo::loadTexture2D("fieldstone_diffuse.png");
+    GLuint _texture_diffuse = bonobo::loadTexture2D("face.png");
     std::vector<Node> _nodes;
     std::vector<glm::vec3> _positions;
     std::vector<glm::vec3> _directions;
@@ -43,7 +43,8 @@ private:
     float _rotation = glm::half_pi<float>();
     const float _tail_radi = 0.5f;
     const float _head_radi = 0.8f;
-    const size_t _tail_segment_offset = 40;
+    size_t _tail_segment_offset = 30;
+    float move_speed;
 };
 
 
