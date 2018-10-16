@@ -49,10 +49,8 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
 
     for (size_t i = 0; i < amount; i++) {
         float x_pos = dist(ran_gen);
-        std::cout << x_pos;
-
         float z_pos = dist(ran_gen);
-        std::cout << ", " << z_pos << "\n";
+
         while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3){
             x_pos = dist(ran_gen);
             z_pos = dist(ran_gen);
@@ -227,10 +225,9 @@ edaf80::Assignment5::run() {
             // Todo: Render all your geometry here.
             //
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
-            //node.render(mCamera.GetWorldToClipMatrix(), node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
 
-            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(10,8,10));//glm::vec3(-snake.get_move_direction().x*10, camera_y_disp, -snake.get_move_direction().z*10));
+            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(-snake.get_move_direction().x*10, camera_y_disp, -snake.get_move_direction().z*10));
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food
@@ -240,7 +237,7 @@ edaf80::Assignment5::run() {
                 if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())){
                     snake.add_node();
                     food.erase(food.begin() + i);
-                    generate_food(sphere_shape, &fallback_shader, set_uniforms, 1, snake.get_position());
+                    generate_food(sphere_shape, &fallback_shader, set_uniforms, 1, snake.get_position()); // Generate new food
                 }else{
                     f.render(mCamera.GetWorldToClipMatrix(), f.get_transform());
                 }
