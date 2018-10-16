@@ -13,7 +13,7 @@
 
 // Contants
 const float base_move_speed = 0.005;
-const float turn_speed = 0.005;
+const float base_turn_speed = 0.005;
 
 class Snejk {
 public:
@@ -45,6 +45,7 @@ private:
     const float _head_radi = 0.8f;
     size_t _tail_segment_offset = 30;
     float move_speed;
+    float turn_speed;
 };
 
 

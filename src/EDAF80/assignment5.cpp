@@ -42,7 +42,7 @@ edaf80::Assignment5::~Assignment5() {
 }
 
 void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
-                                        std::function<void(GLuint)> const &set_uniforms, size_t amount) {
+                                        std::function<void(GLuint)> const &set_uniforms, size_t amount, glm::vec3 snek_pos) {
     std::random_device rd; // Seed
     std::mt19937 ran_gen(rd()); // Random generator
     std::uniform_int_distribution<int> dist(-world_radi, world_radi);
@@ -50,8 +50,14 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
     for (size_t i = 0; i < amount; i++) {
         float x_pos = dist(ran_gen);
         std::cout << x_pos;
+
         float z_pos = dist(ran_gen);
         std::cout << ", " << z_pos << "\n";
+        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3){
+            x_pos = dist(ran_gen);
+            z_pos = dist(ran_gen);
+            std::cout << "snake was too close, " << x_pos << ", " << z_pos << " is new position\n";
+        }
 
         auto food_node = Node();
         food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
@@ -66,7 +72,7 @@ void
 edaf80::Assignment5::run() {
 
     // Load the sphere geometry
-    auto sphere_shape = parametric_shapes::createSphere(20, 20, 1.0f);
+    auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
     if (sphere_shape.vao == 0u) {
         LogError("Failed to retrieve the circle ring mesh");
         return;
@@ -141,7 +147,7 @@ edaf80::Assignment5::run() {
     node.set_scaling(glm::vec3(0.5f));
 
     // Create food nodes
-    generate_food(sphere_shape, &fallback_shader, set_uniforms, 20);
+    generate_food(sphere_shape, &fallback_shader, set_uniforms, 3, snake.get_position());
 
     // Create skybox
     std::string skybox = "opensea";
@@ -234,6 +240,7 @@ edaf80::Assignment5::run() {
                 if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())){
                     snake.add_node();
                     food.erase(food.begin() + i);
+                    generate_food(sphere_shape, &fallback_shader, set_uniforms, 1, snake.get_position());
                 }else{
                     f.render(mCamera.GetWorldToClipMatrix(), f.get_transform());
                 }

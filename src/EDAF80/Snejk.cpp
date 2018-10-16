@@ -28,6 +28,7 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     head_node.add_texture("diffuse_texture", _texture_diffuse, GL_TEXTURE_2D);
 
     move_speed = base_move_speed;
+    turn_speed = base_turn_speed;
 
     for(int i = 0; i < 100; i++){
         _positions.push_back(head_position);
@@ -36,8 +37,6 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
 }
 
 void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
-
-    move_speed += 0.000005f;
 
     // Check if dead
     if (!isAlive()){
@@ -73,6 +72,15 @@ void Snejk::handle_input(InputHandler inputHandler) {
         _rotation -= rotation_amount;
         move_direction = glm::normalize(glm::rotateY(move_direction, -rotation_amount));
     }
+    // Vim bindings
+    if (inputHandler.GetKeycodeState(GLFW_KEY_H) & PRESSED) { //Turn left
+        _rotation += rotation_amount;
+        move_direction = glm::normalize(glm::rotateY(move_direction, rotation_amount));
+    }
+    if (inputHandler.GetKeycodeState(GLFW_KEY_L) & PRESSED) { //Turn right
+        _rotation -= rotation_amount;
+        move_direction = glm::normalize(glm::rotateY(move_direction, -rotation_amount));
+    }
     if (inputHandler.GetKeycodeState(GLFW_KEY_N) & JUST_PRESSED) { //Add new body part
         add_node(_tail_radi);
     }
@@ -87,6 +95,9 @@ float Snejk::get_rotation_y() {
 }
 
 void Snejk::add_node(const float size_multiplier) {
+    move_speed += 0.0005f;
+    turn_speed += 0.0001;
+
     auto new_node = Node();
     new_node.set_geometry(_shape);
     new_node.set_program(_shader, _set_uniforms);

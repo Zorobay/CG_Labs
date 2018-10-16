@@ -3,6 +3,7 @@
 #include <core/node.hpp>
 #include "core/InputHandler.h"
 #include "core/FPSCamera.h"
+#include "Snejk.h"
 #include "core/WindowManager.hpp"
 
 
@@ -31,7 +32,7 @@ namespace edaf80 {
 
         // Generate food for snake
         void generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
-                           std::function<void(GLuint)> const &set_uniforms, size_t amount);
+                           std::function<void(GLuint)> const &set_uniforms, size_t amount, glm::vec3 snek_pos);
 
 
     private:

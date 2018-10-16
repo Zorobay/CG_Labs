@@ -1,4 +1,10 @@
 --Clone by Sebastian Hegardt and Wilhelm Lundström--
+grafik
+respawn
+rewind
+faster and faster 
+kloten ska sitta ihop (via en kropp)
+koppla ihop med klarna för micro transactions
 
 CG_Labs contains the source code for the various Computer Graphics courses
 taught at `Lund University`_ (EDAF80_ and EDAN35_). All assignments of EDAF80
