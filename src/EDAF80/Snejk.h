@@ -43,7 +43,7 @@ private:
     float _rotation = glm::half_pi<float>();
     const float _tail_radi = 0.5f;
     const float _head_radi = 0.8f;
-    const size_t _tail_segment_offset = 40;
+    const size_t _tail_segment_offset = 30;
 };
 
 
