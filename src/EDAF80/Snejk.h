@@ -17,7 +17,7 @@
 
 class Snejk {
 public:
-    Snejk(GLuint const* const shader, std::function<void (GLuint)> const& set_uniforms, bonobo::mesh_data const& shape);
+    Snejk(GLuint const* const shader, std::function<void (GLuint)> const& set_uniforms, bonobo::mesh_data const& shape, float world_radi);
     void render(glm::mat4 const& world_to_clip, const float delta_time);
     void handle_input(InputHandler inputHandler);
     void add_node(const float size_multiplier);
@@ -30,6 +30,7 @@ public:
     void speed_up();
     int get_points();
     void add_points(int p);
+    void disable_movement();
 
 private:
     int points = 0;
@@ -37,7 +38,7 @@ private:
     std::function<void (GLuint)> _set_uniforms;
     bonobo::mesh_data _shape;
     GLuint _texture_bump = bonobo::loadTexture2D("fieldstone_bump.png");
-    GLuint _texture_diffuse = bonobo::loadTexture2D("fieldstone_diffuse.png");
+    GLuint _texture_diffuse = bonobo::loadTexture2D("bluesnek.png");
     std::vector<Node> _nodes;
     std::vector<glm::vec3> _positions;
     std::vector<glm::vec3> _directions;
@@ -54,6 +55,7 @@ private:
     const float move_speed_factor = 0.0001;
     const float turn_speed_factor = 0.00003;
     const float segment_distance = 1.7f;
+    float _world_radi;
 
 //    float speed_up_timer = 0.0f;
 //    const float max_speed = base_move_speed * 2.0f;
