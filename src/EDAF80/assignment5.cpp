@@ -270,6 +270,10 @@ edaf80::Assignment5::run() {
                                    "Rendering is suspended until the issue is solved. Once fixed, just reload the shaders again.",
                                    "error");
         }
+        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED & !snake.is_alive()) {
+            int p_half = std::round((double)snake.get_points() / 2);
+            snake.add_points(-p_half);
+        }
 
         ImGui_ImplGlfwGL3_NewFrame();
 
@@ -279,11 +283,6 @@ edaf80::Assignment5::run() {
         // Handle snake input
         if (snake.is_alive()){
             snake.handle_input(inputHandler);
-        }
-        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED & !snake.is_alive()) {
-            std::cout << "space clicked";
-            int p_half = std::round((double)snake.get_points() / 2);
-            snake.add_points(-p_half);
         }
 
         int framebuffer_width, framebuffer_height;
