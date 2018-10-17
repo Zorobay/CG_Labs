@@ -106,6 +106,17 @@ edaf80::Assignment5::run() {
         LogError("Failed to retrieve the circle ring mesh");
         return;
     }
+    // Load obj files
+    std::vector<bonobo::mesh_data> objects = bonobo::loadObjects("low_poly_trees.obj");
+    if (objects.empty()) {
+        LogError("Failed to load the trees geometry: exiting.");
+
+        Log::View::Destroy();
+        Log::Destroy();
+        return;
+    }
+    bonobo::mesh_data const &tree = objects.front();
+
     // Set up the camera
     mCamera.mWorld.SetTranslate(glm::vec3(0.0f, camera_y_disp, camera_z_disp));
     mCamera.mMouseSensitivity = 0.003f;
@@ -148,11 +159,19 @@ edaf80::Assignment5::run() {
     }
 
     GLuint blinn_phong_normal_shader = 0u;
-    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phon_normal.vert"},
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phong_normal.vert"},
                                               {ShaderType::fragment, "EDAF80/blinn_phong_normal.frag"}},
                                              blinn_phong_normal_shader);
     if (blinn_phong_normal_shader == 0u) {
-        LogError("Failed to load normal map shader");
+        LogError("Failed to load blinn phong normal shader");
+    }
+
+    GLuint blinn_phong_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phong.vert"},
+                                              {ShaderType::fragment, "EDAF80/blinn_phong.frag"}},
+                                             blinn_phong_shader);
+    if (blinn_phong_shader == 0u) {
+        LogError("Failed to load blinn phong shader");
     }
 
     GLuint water_shader = 0u;
@@ -178,8 +197,8 @@ edaf80::Assignment5::run() {
 
     // Blinn phong uniforms
     auto camera_position = mCamera.mWorld.GetTranslation();
-    auto ambient = glm::vec3(0.2f, 0.2f, 0.2f);
-    auto diffuse = glm::vec3(0.7f, 0.2f, 0.4f);
+    auto ambient = glm::vec3(0.3f, 0.1f, 0.0f);
+    auto diffuse = glm::vec3(0.7f, 0.3f, 0.0f);
     auto specular = glm::vec3(1.0f, 1.0f, 1.0f);
     auto shininess = 1.0f;
     auto const phong_set_uniforms = [&light_position, &camera_position, &ambient, &diffuse, &specular, &shininess](
@@ -243,6 +262,11 @@ edaf80::Assignment5::run() {
     plane_node.set_program(&default_shader, diffuse_uniforms);
     plane_node.add_texture("soil", bonobo::loadTexture2D("Soil.png"), GL_TEXTURE_2D);
     plane_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
+
+    auto tree_node = Node();
+    tree_node.set_geometry(tree);
+    tree_node.set_program(&blinn_phong_shader, phong_set_uniforms);
+    tree_node.set_scaling(glm::vec3(0.05));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -317,6 +341,9 @@ edaf80::Assignment5::run() {
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
 
+            //Render trees
+            tree_node.render(mCamera.GetWorldToClipMatrix(), tree_node.get_transform());
+
             if (!snake.is_alive() & !score_registered) { // Snake died
                 snake.disable_movement(); // Stop snake
                 highscores.push_back(snake.get_points()); // Register points
@@ -354,7 +381,6 @@ edaf80::Assignment5::run() {
             int p = snake.get_points();
             std::string message = "Points: " + std::to_string(p);
             ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
-            ImGui::Text("Is Alive: %d", snake.is_alive());
 
             if (!snake.is_alive()) {
                 ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0), "You died! Click <Space> to restart.");

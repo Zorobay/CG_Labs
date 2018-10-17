@@ -151,7 +151,6 @@ void Snejk::speed_up() {
     move_speed += move_speed_factor;
     turn_speed += turn_speed_factor;
     if(glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) > segment_distance) {
-        std::cout <<  glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) << std::endl;
         _tail_segment_offset--;
     }
 }
