@@ -11,6 +11,7 @@
 #include "core/ShaderProgramManager.hpp"
 #include "core/InputHandler.h"
 #include <ctime>
+#include <cmath>
 
 
 
@@ -38,10 +39,11 @@ private:
     std::function<void (GLuint)> _set_uniforms;
     bonobo::mesh_data _shape;
     GLuint _texture_bump = bonobo::loadTexture2D("fieldstone_bump.png");
-    GLuint _texture_diffuse = bonobo::loadTexture2D("sneeek.png");
+    GLuint _texture_diffuse = bonobo::loadTexture2D("bluesnek.png");
     std::vector<Node> _nodes;
     std::vector<glm::vec3> _positions;
     std::vector<glm::vec3> _directions;
+    std::vector<float> _rotations;
     size_t _counter = 0;
     float _rotation = glm::half_pi<float>();
     const float _tail_radi = 0.5f;
@@ -53,7 +55,7 @@ private:
     const float base_turn_speed = 0.006;
     const float move_speed_factor = 0.0001;
     const float turn_speed_factor = 0.00003;
-    const float segment_distance = 2.0f;
+    const float segment_distance = 1.7f;
     float _world_radi;
     bool alive = true;
 //    float speed_up_timer = 0.0f;

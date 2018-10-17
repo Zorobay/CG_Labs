@@ -7,6 +7,7 @@
 #include "Snejk.h"
 #include "glm/gtx/rotate_vector.hpp"
 #include "glm/geometric.hpp"
+#include <cmath>
 
 auto head_node = Node();
 glm::vec3 head_position = glm::vec3(0, 0, 0);
@@ -34,6 +35,7 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     for(int i = 0; i < 100; i++){
         _positions.push_back(head_position);
         _directions.push_back(move_direction);
+        _rotations.push_back(_rotation);
     }
 }
 
@@ -46,11 +48,13 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
     head_node.render(world_to_clip, head_node.get_transform());
     _positions.push_back(head_position);
     _directions.push_back(move_direction);
+    _rotations.push_back(_rotation);
 
     // Move tail
     for (size_t i = 0; i < _nodes.size(); i++) { // move all nodes
         size_t pos_i = std::min(_positions.size() - 1, (_positions.size() - 1 - (i + 1) * _tail_segment_offset));
         _nodes[i].set_translation(_positions[pos_i]);
+        _nodes[i].set_rotation_y(_rotations[pos_i]);
         _nodes[i].render(world_to_clip, _nodes[i].get_transform());
     }
 
