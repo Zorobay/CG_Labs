@@ -12,6 +12,7 @@
 #include "parametric_shapes.hpp"
 
 #include <imgui.h>
+#include <cstdlib>
 #include <external/imgui_impl_glfw_gl3.h>
 #include <tinyfiledialogs.h>
 
@@ -41,6 +42,26 @@ edaf80::Assignment5::~Assignment5() {
     Log::View::Destroy();
 }
 
+Node 
+createSpecialFood() {
+        auto food_node = Node();
+        int kind = rand() % 100;
+        if(kind < 5){
+            //redbull
+        } else 
+        if (kind < 10){
+            //confusion
+        } else 
+        if (kind < 20){
+            //speed and points
+        } else {
+            //normal
+        } 
+        GLuint texture = bonobo::loadTexture2D("fieldstone_bump.png");
+        food_node.add_texture("normal_map", texture, GL_TEXTURE_2D);
+        return food_node;
+}
+
 void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
                                         std::function<void(GLuint)> const &set_uniforms, size_t amount,
                                         glm::vec3 snek_pos) {
@@ -58,10 +79,10 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
             std::cout << "snake was too close, " << x_pos << ", " << z_pos << " is new position\n";
         }
 
-        auto food_node = Node();
-        food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
-        food_node.set_scaling(glm::vec3(food_radi * 0.8));
+        auto food_node = createSpecialFood();
         food_node.set_geometry(shape);
+        food_node.set_scaling(glm::vec3(food_radi * 0.8));
+        food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
         food_node.set_program(program, set_uniforms);
         food.push_back(food_node);
     }
@@ -104,7 +125,7 @@ edaf80::Assignment5::run() {
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/diffuse.vert"},
                                               {ShaderType::fragment, "EDAF80/diffuse.frag"}},
                                              diffuse_shader);
-    if (diffuse_shader == 0u){
+    if (diffuse_shader == 0u) {
         LogError("Failed to load diffuse shader");
         return;
     }
@@ -156,7 +177,7 @@ edaf80::Assignment5::run() {
     auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape);
 
     // Create food nodes
-    generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 20, snake.get_position());
+    generate_food(sphere_shape, &default_shader, diffuse_uniforms, 20, snake.get_position());
 
     // Create skybox
     std::string skybox = "opensea";
@@ -176,7 +197,7 @@ edaf80::Assignment5::run() {
     double nowTime, lastTime = GetTimeMilliseconds();
     double fpsNextTick = lastTime + 1000.0;
 
-    bool show_logs = true;
+    bool show_logs = false;
     bool show_gui = true;
     bool shader_reload_failed = false;
 
@@ -229,7 +250,7 @@ edaf80::Assignment5::run() {
             // Todo: Render all your geometry here.
             //
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
-            if (snake.is_alive()){
+            if (snake.is_alive()) {
                 snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
             }
 
@@ -245,8 +266,9 @@ edaf80::Assignment5::run() {
                 if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())) {
                     snake.add_node();
                     snake.speed_up();
+                    snake.add_points(1);
                     food.erase(food.begin() + i);
-                    generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 1,
+                    generate_food(sphere_shape, &default_shader, diffuse_uniforms, 1,
                                   snake.get_position()); // Generate new food
                 } else {
                     f.render(mCamera.GetWorldToClipMatrix(), f.get_transform());
@@ -256,10 +278,14 @@ edaf80::Assignment5::run() {
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        //
-        // Todo: If you want a custom ImGUI window, you can set it up
-        //       here
-        //
+        bool opened = ImGui::Begin("Stats", &opened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize |
+                                                     ImGuiWindowFlags_NoCollapse);
+        if (opened) {
+            int p = snake.get_points();
+            std::string message = "Points: " + std::to_string(p);
+            ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
+        }
+        ImGui::End();
 
         if (show_logs)
             Log::View::Render();

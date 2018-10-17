@@ -137,4 +137,12 @@ void Snejk::speed_up() {
     }
 }
 
+int Snejk::get_points() {
+    return points;
+}
+
+void Snejk::add_points(int p) {
+    points += p;
+}
+
 
