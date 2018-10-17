@@ -346,12 +346,13 @@ edaf80::Assignment5::run() {
             int p = snake.get_points();
             std::string message = "Points: " + std::to_string(p);
             ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
+            ImGui::Text("Is Alive: %d", snake.is_alive());
 
             if (!snake.is_alive()) {
                 ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0), "You died! Click <Space> to restart.");
             }
 
-            for (size_t i = 0; i < highscores.size(); i++) {
+            for (size_t i = 0; i < std::min((int)highscores.size(), 10); i++) {
                 ImGui::Text("%d. %d", i+1, highscores[highscores.size()-1 -i]);
             }
         }
