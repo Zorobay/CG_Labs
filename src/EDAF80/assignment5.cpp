@@ -112,12 +112,15 @@ void edaf80::Assignment5::run()
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
     auto quad_shape = parametric_shapes::createQuad(world_radi*2.1, world_radi*2.1, 30.0f);
-    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi*0.5);
+    auto circle_shape = parametric_shapes::createQuad(world_radi, world_radi, 30);
     if (sphere_shape.vao == 0u | quad_shape.vao == 0u | circle_shape.vao == 0u)
     {
         LogError("Failed to retrieve the circle ring mesh");
         return;
     }
+
+    float max_radius = world_radi*0.5;
+
     // Load obj files
     std::vector<bonobo::mesh_data> objects = bonobo::loadObjects("low_poly_trees.obj");
     if (objects.empty())
@@ -184,6 +187,15 @@ void edaf80::Assignment5::run()
         LogError("Failed to load blinn phong normal shader");
     }
 
+    GLuint circle_plane_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/circle_plane.vert"},
+                                              {ShaderType::fragment, "EDAF80/circle_plane.frag"}},
+                                             circle_plane_shader);
+    if (circle_plane_shader == 0u)
+    {
+        LogError("Failed to load circle_plane shader");
+    }
+
     GLuint blinn_phong_shader = 0u;
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/blinn_phong.vert"},
                                               {ShaderType::fragment, "EDAF80/blinn_phong.frag"}},
@@ -210,9 +222,10 @@ void edaf80::Assignment5::run()
 
     // Setup diffuse uniforms
     auto color = glm::vec3(0.5, 0.3, 0.1);
-    auto const diffuse_uniforms = [&light_position, &color](GLuint program) {
+    auto const diffuse_uniforms = [&light_position, &color, &max_radius](GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
         glUniform3fv(glGetUniformLocation(program, "color"), 1, glm::value_ptr(color));
+        glUniform1f(glGetUniformLocation(program, "max_radius"), max_radius);
     };
 
     // Blinn phong uniforms
@@ -279,7 +292,7 @@ void edaf80::Assignment5::run()
 
     auto plane_node = Node();
     plane_node.set_geometry(circle_shape);
-    plane_node.set_program(&default_shader, diffuse_uniforms);
+    plane_node.set_program(&circle_plane_shader, diffuse_uniforms);
     plane_node.add_texture("soil", bonobo::loadTexture2D("Soil.png"), GL_TEXTURE_2D);
     plane_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
 
@@ -379,8 +392,8 @@ void edaf80::Assignment5::run()
             }
 
             mCamera.mWorld.SetTranslate(snake.get_position() +
-                                        glm::vec3(-snake.get_move_direction().x * 10, camera_y_disp,
-                                                  -snake.get_move_direction().z * 10));
+                                        glm::vec3(-snake.get_move_direction().x * 7, camera_y_disp,
+                                                  -snake.get_move_direction().z * 7));
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food

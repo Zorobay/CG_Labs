@@ -25,7 +25,7 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     head_node.set_program(_shader, _set_uniforms);
     head_node.set_geometry(_shape);
     head_node.set_translation(head_position);
-    head_node.set_scaling(glm::vec3(_head_radi));
+    head_node.set_scaling(glm::vec3(_head_radi, _head_radi*0.7, _head_radi*0.9));
     head_node.add_texture("normal_map", _texture_bump, GL_TEXTURE_2D);
     head_node.add_texture("diffuse_texture", _texture_diffuse, GL_TEXTURE_2D);
 
