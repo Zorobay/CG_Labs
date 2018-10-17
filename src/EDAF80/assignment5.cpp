@@ -46,40 +46,9 @@ edaf80::Assignment5::~Assignment5()
     Log::View::Destroy();
 }
 
-Food makeSpecial(Node food_node)
-{
-    int kind = rand() % 100;
-    std::string texture_img = "";
-    Food food_man = Food();
-
-    if (kind < 5)
-    {
-        //redbull
-        texture_img = "redsneek.png";
-    }
-    else if (kind < 10)
-    {
-        //confusion
-        texture_img = "purpl.png";
-    }
-    else if (kind < 20)
-    {
-        //speed and points
-        texture_img = "lightblue.png";
-    }
-    else
-    {
-        //normal
-        texture_img = "sneeek.png";
-    }
-    food_node.add_texture("diffuse_texture", bonobo::loadTexture2D(texture_img), GL_TEXTURE_2D);
-    food_man.new_node(food_node);
-    return food_man;
-}
-
 void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
                                         std::function<void(GLuint)> const &set_uniforms, size_t amount,
-                                        glm::vec3 snek_pos)
+                                        Snejk snejk)
 {
     std::random_device rd;      // Seed
     std::mt19937 ran_gen(rd()); // Random generator
@@ -90,7 +59,7 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
         float x_pos = dist(ran_gen);
         float z_pos = dist(ran_gen);
 
-        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3)
+        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snejk.get_position()) < 3)
         {
             x_pos = dist(ran_gen);
             z_pos = dist(ran_gen);
@@ -102,7 +71,34 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
         food_node.set_scaling(glm::vec3(food_radi * 0.8));
         food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
         food_node.set_program(program, set_uniforms);
-        food.push_back(makeSpecial(food_node));
+
+        int kind = rand() % 100;
+        std::string texture_img = "";
+        Food food_man = Food();
+
+        if (kind < 5)
+        {
+            //redbull
+            texture_img = "redsneek.png";
+        }
+        else if (kind < 10)
+        {
+            //confusion
+            texture_img = "purpl.png";
+        }
+        else if (kind < 20)
+        {
+            //speed and points
+            texture_img = "lightblue.png";
+        }
+        else
+        {
+            //normal
+            texture_img = "sneeek.png";
+        }
+        food_node.add_texture("diffuse_texture", bonobo::loadTexture2D(texture_img), GL_TEXTURE_2D);
+        food_man.new_node(food_node, &snejk, "LIT");
+        food_list.push_back(food_man);
     }
 }
 
@@ -111,8 +107,8 @@ void edaf80::Assignment5::run()
 
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
-    auto quad_shape = parametric_shapes::createQuad(world_radi*2.1, world_radi*2.1, 30.0f);
-    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi*0.5);
+    auto quad_shape = parametric_shapes::createQuad(world_radi * 2.1, world_radi * 2.1, 30.0f);
+    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi * 0.5);
     if (sphere_shape.vao == 0u | quad_shape.vao == 0u | circle_shape.vao == 0u)
     {
         LogError("Failed to retrieve the circle ring mesh");
@@ -262,7 +258,7 @@ void edaf80::Assignment5::run()
     auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape, world_radi);
 
     // Create food nodes
-    generate_food(sphere_shape, &default_shader, diffuse_uniforms, 20, snake.get_position());
+    generate_food(sphere_shape, &default_shader, diffuse_uniforms, 20, snake);
 
     auto skybox_node = Node();
     skybox_node.set_geometry(sphere_shape);
@@ -280,7 +276,7 @@ void edaf80::Assignment5::run()
     auto plane_node = Node();
     plane_node.set_geometry(circle_shape);
     plane_node.set_program(&default_shader, diffuse_uniforms);
-    plane_node.add_texture("soil", bonobo::loadTexture2D("Soil.png"), GL_TEXTURE_2D);
+    plane_node.add_texture("", bonobo::loadTexture2D("boards.png"), GL_TEXTURE_2D);
     plane_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
 
     auto tree_node = Node();
@@ -384,18 +380,18 @@ void edaf80::Assignment5::run()
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food
-            for (size_t i = 0; i < food.size(); i++)
+            for (size_t i = 0; i < food_list.size(); i++)
             {
-                Food f = food[i];
+                Food f = food_list[i];
                 // If food is eaten, remove it and make snake longer
                 if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position()))
                 {
                     snake.add_node();
                     snake.speed_up();
                     snake.add_points(1);
-                    food.erase(food.begin() + i);
+                    food_list.erase(food_list.begin() + i);
                     generate_food(sphere_shape, &default_shader, diffuse_uniforms, 1,
-                                  snake.get_position()); // Generate new food
+                                  snake); // Generate new food
                 }
                 else
                 {

@@ -34,7 +34,7 @@ class Assignment5
 
 	// Generate food for snake
 	void generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
-					   std::function<void(GLuint)> const &set_uniforms, size_t amount, glm::vec3 snek_pos);
+					   std::function<void(GLuint)> const &set_uniforms, size_t amount, Snejk snejk);
 
   private:
 	FPSCameraf mCamera;
@@ -43,7 +43,7 @@ class Assignment5
 	GLFWwindow *window;
 	const float world_radi = 100.0f;
 	const float food_radi = 0.3f;
-	std::vector<Food> food;
+	std::vector<Food> food_list;
 	const float camera_y_disp = 3.0f;
 	const float camera_z_disp = 8.0f;
 	std::vector<int> highscores;

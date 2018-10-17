@@ -15,13 +15,16 @@ class Food
 {
 public:
   Food();
-  void new_node(Node node);
+  void new_node(Node node, Snejk const &snejk, std::string type);
   void render(glm::mat4 const &WVP, glm::mat4 const &world) const;
   glm::mat4x4 get_transform() const;
   glm::vec3 get_translation() const;
+  void eatenEffect();
 
 private:
   Node food_node;
+  Snejk const food_snejk;
+  std::string my_type;
 };
 
 #endif //CG_LABS_FOOD_H
