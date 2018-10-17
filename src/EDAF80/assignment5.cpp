@@ -101,7 +101,7 @@ edaf80::Assignment5::run() {
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
     auto quad_shape = parametric_shapes::createQuad(world_radi*2.1, world_radi*2.1, 30.0f);
-    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi*0.8);
+    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi*0.5);
     if (sphere_shape.vao == 0u | quad_shape.vao == 0u) {
         LogError("Failed to retrieve the circle ring mesh");
         return;

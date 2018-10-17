@@ -123,7 +123,7 @@ bool Snejk::is_alive() {
     }
 
     // Died from going into wall
-    if (_world_radi < glm::distance(head_position, glm::vec3(0,0,0))) {
+    if (_world_radi*0.5 < glm::distance(head_position, glm::vec3(0,0,0))) {
         alive = false;
         return alive;
     }
