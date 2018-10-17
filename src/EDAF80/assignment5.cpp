@@ -49,18 +49,18 @@ createSpecialFood() {
         std::string texture_img = "";
         if(kind < 5){
             //redbull
-            texture_img = "redsnek.png";
+            texture_img = "redsneek.png";
         } else 
         if (kind < 10){
             //confusion
-            texture_img = "confused.png";
+            texture_img = "purpl.png";
         } else 
         if (kind < 20){
             //speed and points
            texture_img = "sneeek.png";
         } else {
             //normal
-            texture_img = "c.png";
+            texture_img = "bluesnek.png";
         } 
         food_node.add_texture("diffuse_texture", bonobo::loadTexture2D(texture_img), GL_TEXTURE_2D);
         return food_node;
