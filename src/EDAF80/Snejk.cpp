@@ -14,11 +14,12 @@ auto move_direction = glm::normalize(glm::vec3(0, 0, -1));
 
 
 Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_uniforms,
-             bonobo::mesh_data const &shape) {
+             bonobo::mesh_data const &shape, float world_radi) {
 
     _shader = shader;
     _set_uniforms = set_uniforms;
     _shape = shape;
+    _world_radi = world_radi;
 
     head_node.set_program(_shader, _set_uniforms);
     head_node.set_geometry(_shape);
@@ -117,6 +118,10 @@ bool Snejk::is_alive() {
             return false;
         }
     }
+
+    if (_world_radi < glm::distance(head_node.get_translation(), glm::vec3(0,0,0))) { // Outside world
+        return false;
+    }
     return true;
 }
 
@@ -143,6 +148,11 @@ int Snejk::get_points() {
 
 void Snejk::add_points(int p) {
     points += p;
+}
+
+void Snejk::disable_movement() {
+    move_speed = 0;
+    turn_speed = 0;
 }
 
 
