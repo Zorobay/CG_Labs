@@ -146,4 +146,12 @@ void Snejk::speed_up() {
     move_speed = max_speed;
 }
 
+int Snejk::get_points() {
+    return points;
+}
+
+void Snejk::add_points(int p) {
+    points += p;
+}
+
 

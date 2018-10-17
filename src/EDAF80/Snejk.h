@@ -27,14 +27,16 @@ public:
     float get_radius();
     bool is_alive();
     void speed_up();
+    int get_points();
+    void add_points(int p);
 
 private:
-
+    int points;
     GLuint const* _shader;
     std::function<void (GLuint)> _set_uniforms;
     bonobo::mesh_data _shape;
     GLuint _texture_bump = bonobo::loadTexture2D("fieldstone_bump.png");
-    GLuint _texture_diffuse = bonobo::loadTexture2D("face.png");
+    GLuint _texture_diffuse = bonobo::loadTexture2D("fieldstone_diffuse.png");
     std::vector<Node> _nodes;
     std::vector<glm::vec3> _positions;
     std::vector<glm::vec3> _directions;

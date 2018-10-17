@@ -176,7 +176,7 @@ edaf80::Assignment5::run() {
     double nowTime, lastTime = GetTimeMilliseconds();
     double fpsNextTick = lastTime + 1000.0;
 
-    bool show_logs = true;
+    bool show_logs = false;
     bool show_gui = true;
     bool shader_reload_failed = false;
 
@@ -256,10 +256,10 @@ edaf80::Assignment5::run() {
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        //
-        // Todo: If you want a custom ImGUI window, you can set it up
-        //       here
-        //
+        bool opened = ImGui::Begin("Stats", &opened, ImVec2(150, 50), -1.0f, 0);
+        if (opened) {
+            ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: " + )
+        }
 
         if (show_logs)
             Log::View::Render();
