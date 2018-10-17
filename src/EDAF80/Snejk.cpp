@@ -13,9 +13,9 @@ auto head_node = Node();
 glm::vec3 head_position = glm::vec3(0, 0, 0);
 auto move_direction = glm::normalize(glm::vec3(0, 0, -1));
 
-
 Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_uniforms,
-             bonobo::mesh_data const &shape, float world_radi) {
+             bonobo::mesh_data const &shape, float world_radi)
+{
 
     _shader = shader;
     _set_uniforms = set_uniforms;
@@ -32,14 +32,16 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     move_speed = base_move_speed;
     turn_speed = base_turn_speed;
 
-    for(int i = 0; i < 100; i++){
+    for (int i = 0; i < 100; i++)
+    {
         _positions.push_back(head_position);
         _directions.push_back(move_direction);
         _rotations.push_back(_rotation);
     }
 }
 
-void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
+void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time)
+{
 
     // Move head
     head_position += move_direction * delta_time * move_speed;
@@ -51,7 +53,8 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
     _rotations.push_back(_rotation);
 
     // Move tail
-    for (size_t i = 0; i < _nodes.size(); i++) { // move all nodes
+    for (size_t i = 0; i < _nodes.size(); i++)
+    { // move all nodes
         size_t pos_i = std::min(_positions.size() - 1, (_positions.size() - 1 - (i + 1) * _tail_segment_offset));
         _nodes[i].set_translation(_positions[pos_i]);
         _nodes[i].set_rotation_y(_rotations[pos_i]);
@@ -61,41 +64,49 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
     _counter++;
 }
 
-void Snejk::handle_input(InputHandler inputHandler) {
+void Snejk::handle_input(InputHandler inputHandler)
+{
     float rotation_amount = glm::two_pi<float>() * turn_speed;
 
-    if (inputHandler.GetKeycodeState(GLFW_KEY_LEFT) & PRESSED) { //Turn left
+    if (inputHandler.GetKeycodeState(GLFW_KEY_LEFT) & PRESSED)
+    { //Turn left
         _rotation += rotation_amount;
         move_direction = glm::normalize(glm::rotateY(move_direction, rotation_amount));
     }
-    if (inputHandler.GetKeycodeState(GLFW_KEY_RIGHT) & PRESSED) { //Turn right
+    if (inputHandler.GetKeycodeState(GLFW_KEY_RIGHT) & PRESSED)
+    { //Turn right
         _rotation -= rotation_amount;
         move_direction = glm::normalize(glm::rotateY(move_direction, -rotation_amount));
     }
     // Vim bindings
-    if (inputHandler.GetKeycodeState(GLFW_KEY_H) & PRESSED) { //Turn left
+    if (inputHandler.GetKeycodeState(GLFW_KEY_H) & PRESSED)
+    { //Turn left
         _rotation += rotation_amount;
         move_direction = glm::normalize(glm::rotateY(move_direction, rotation_amount));
     }
-    if (inputHandler.GetKeycodeState(GLFW_KEY_L) & PRESSED) { //Turn right
+    if (inputHandler.GetKeycodeState(GLFW_KEY_L) & PRESSED)
+    { //Turn right
         _rotation -= rotation_amount;
         move_direction = glm::normalize(glm::rotateY(move_direction, -rotation_amount));
     }
-    if (inputHandler.GetKeycodeState(GLFW_KEY_N) & JUST_PRESSED) { //Add new body part
+    if (inputHandler.GetKeycodeState(GLFW_KEY_N) & JUST_PRESSED)
+    { //Add new body part
         add_node(_tail_radi);
     }
-
 }
 
-glm::vec3 Snejk::get_position() {
+glm::vec3 Snejk::get_position()
+{
     return head_position;
 }
 
-float Snejk::get_rotation_y() {
+float Snejk::get_rotation_y()
+{
     return _rotation;
 }
 
-void Snejk::add_node(const float size_multiplier) {
+void Snejk::add_node(const float size_multiplier)
+{
     speed_up();
 
     auto new_node = Node();
@@ -111,26 +122,31 @@ void Snejk::add_node(const float size_multiplier) {
     new_node.set_translation(_positions[pos_i]);
 }
 
-
-void Snejk::add_node() {
+void Snejk::add_node()
+{
     add_node(_tail_radi);
 }
 
 // Function that tests for collision between head and tail
-bool Snejk::is_alive() {
-    if (!alive){
+bool Snejk::is_alive()
+{
+    if (!alive)
+    {
         return alive;
     }
 
     // Died from going into wall
-    if (_world_radi*0.5 < glm::distance(head_position, glm::vec3(0,0,0))) {
+    if (_world_radi*0.5 < glm::distance(head_position, glm::vec3(0,0,0)))
+    {
         alive = false;
         return alive;
     }
 
     // Died from slithering into self
-    for (Node n: _nodes) {
-        if (_tail_radi + 1.0f > glm::distance(n.get_translation(), head_position)) {
+    for (Node n : _nodes)
+    {
+        if (_tail_radi + 1.0f > glm::distance(n.get_translation(), head_position))
+        {
             alive = false;
             return alive;
         }
@@ -139,36 +155,44 @@ bool Snejk::is_alive() {
     return alive;
 }
 
-glm::vec3 Snejk::get_move_direction() {
+glm::vec3 Snejk::get_move_direction()
+{
     return move_direction;
 }
 
-float Snejk::get_radius() {
+float Snejk::get_radius()
+{
     return _head_radi;
 }
 
-void Snejk::speed_up() {
+void Snejk::speed_up()
+{
     move_speed += move_speed_factor;
     turn_speed += turn_speed_factor;
-    if(glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) > segment_distance) {
+    if (glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) > segment_distance)
+    {
         _tail_segment_offset--;
     }
 }
 
-int Snejk::get_points() {
+int Snejk::get_points()
+{
     return points;
 }
 
-void Snejk::add_points(int p) {
+void Snejk::add_points(int p)
+{
     points += p;
 }
 
-void Snejk::disable_movement() {
+void Snejk::disable_movement()
+{
     move_speed = 0.0f;
     turn_speed = 0.0f;
 }
 
-void Snejk::reset() {
+void Snejk::reset()
+{
     points = 0;
     move_speed = base_move_speed;
     turn_speed = base_turn_speed;
@@ -184,7 +208,8 @@ void Snejk::reset() {
     _rotation = glm::half_pi<float>();
 
     // Push buffer
-    for(int i = 0; i < 100; i++){
+    for (int i = 0; i < 100; i++)
+    {
         _positions.push_back(head_position);
         _directions.push_back(move_direction);
         _rotations.push_back(_rotation);
@@ -192,5 +217,3 @@ void Snejk::reset() {
 
     alive = true;
 }
-
-

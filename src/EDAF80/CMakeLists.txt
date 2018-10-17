@@ -73,6 +73,8 @@ set (
 
 	"assignment5.cpp"
 	"assignment5.hpp"
+	"Food.hpp"
+	"Food.cpp"
 )
 
 source_group (

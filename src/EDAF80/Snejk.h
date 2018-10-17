@@ -13,10 +13,11 @@
 #include <ctime>
 #include <cmath>
 
-class Snejk {
-public:
-    Snejk(GLuint const* const shader, std::function<void (GLuint)> const& set_uniforms, bonobo::mesh_data const& shape, float world_radi);
-    void render(glm::mat4 const& world_to_clip, const float delta_time);
+class Snejk
+{
+  public:
+    Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_uniforms, bonobo::mesh_data const &shape, float world_radi);
+    void render(glm::mat4 const &world_to_clip, const float delta_time);
     void handle_input(InputHandler inputHandler);
     void add_node(const float size_multiplier);
     void add_node();
@@ -31,10 +32,10 @@ public:
     void disable_movement();
     void reset();
 
-private:
+  private:
     int points = 0;
-    GLuint const* _shader;
-    std::function<void (GLuint)> _set_uniforms;
+    GLuint const *_shader;
+    std::function<void(GLuint)> _set_uniforms;
     bonobo::mesh_data _shape;
     GLuint _texture_bump = bonobo::loadTexture2D("fieldstone_bump.png");
     GLuint _texture_diffuse = bonobo::loadTexture2D("bluesnek.png");
@@ -56,11 +57,9 @@ private:
     const float segment_distance = 1.7f;
     float _world_radi;
     bool alive = true;
-//    float speed_up_timer = 0.0f;
-//    const float max_speed = base_move_speed * 2.0f;
-//    bool is_sped_up = false;
+    //    float speed_up_timer = 0.0f;
+    //    const float max_speed = base_move_speed * 2.0f;
+    //    bool is_sped_up = false;
 };
-
-
 
 #endif //CG_LABS_SNEJK_H
