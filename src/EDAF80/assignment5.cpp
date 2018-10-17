@@ -12,6 +12,7 @@
 #include "parametric_shapes.hpp"
 
 #include <imgui.h>
+#include <cstdlib>
 #include <external/imgui_impl_glfw_gl3.h>
 #include <tinyfiledialogs.h>
 
@@ -41,6 +42,26 @@ edaf80::Assignment5::~Assignment5() {
     Log::View::Destroy();
 }
 
+Node 
+createSpecialFood() {
+        auto food_node = Node();
+        int kind = rand() % 100;
+        if(kind < 5){
+            //redbull
+        } else 
+        if (kind < 10){
+            //confusion
+        } else 
+        if (kind < 20){
+            //speed and points
+        } else {
+            //normal
+        } 
+        GLuint texture = bonobo::loadTexture2D("fieldstone_bump.png");
+        food_node.add_texture("normal_map", texture, GL_TEXTURE_2D);
+        return food_node;
+}
+
 void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
                                         std::function<void(GLuint)> const &set_uniforms, size_t amount,
                                         glm::vec3 snek_pos) {
@@ -58,10 +79,10 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
             std::cout << "snake was too close, " << x_pos << ", " << z_pos << " is new position\n";
         }
 
-        auto food_node = Node();
-        food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
-        food_node.set_scaling(glm::vec3(food_radi * 0.8));
+        auto food_node = createSpecialFood();
         food_node.set_geometry(shape);
+        food_node.set_scaling(glm::vec3(food_radi * 0.8));
+        food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
         food_node.set_program(program, set_uniforms);
         food.push_back(food_node);
     }
@@ -194,8 +215,7 @@ edaf80::Assignment5::run() {
     auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape);
 
     // Create food nodes
-    generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 3, snake.get_position());
-
+    generate_food(sphere_shape, &default_shader, diffuse_uniforms, 20, snake.get_position());
 
     auto skybox_node = Node();
     skybox_node.set_geometry(sphere_shape);
@@ -290,7 +310,7 @@ edaf80::Assignment5::run() {
                     snake.speed_up();
                     snake.add_points(1);
                     food.erase(food.begin() + i);
-                    generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 1,
+                    generate_food(sphere_shape, &default_shader, diffuse_uniforms, 1,
                                   snake.get_position()); // Generate new food
                 } else {
                     f.render(mCamera.GetWorldToClipMatrix(), f.get_transform());

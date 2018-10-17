@@ -44,15 +44,18 @@ private:
     float _rotation = glm::half_pi<float>();
     const float _tail_radi = 0.5f;
     const float _head_radi = 0.8f;
-    size_t _tail_segment_offset = 30;
+    size_t _tail_segment_offset = 20;
     float move_speed;
     float turn_speed;
     const float base_move_speed = 0.005;
     const float base_turn_speed = 0.006;
+    const float move_speed_factor = 0.0001;
+    const float turn_speed_factor = 0.00003;
+    const float segment_distance = 2.0f;
 
-    float speed_up_timer = 0.0f;
-    const float max_speed = base_move_speed * 2.0f;
-    bool is_sped_up = false;
+//    float speed_up_timer = 0.0f;
+//    const float max_speed = base_move_speed * 2.0f;
+//    bool is_sped_up = false;
 };
 
 

@@ -38,16 +38,6 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
 
 void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
 
-    // Handle speed up timer
-    if (is_sped_up) {
-        speed_up_timer += delta_time;
-
-        if (speed_up_timer > 5000) { // if more than 5 seconds passed
-            move_speed = base_move_speed;
-            speed_up_timer = 0;
-            is_sped_up = false;
-        }
-    }
     // Move head
     head_position += move_direction * delta_time * move_speed;
     head_node.set_translation(head_position);
@@ -62,7 +52,6 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
         _nodes[i].set_translation(_positions[pos_i]);
         _nodes[i].render(world_to_clip, _nodes[i].get_transform());
     }
-
 
     _counter++;
 }
@@ -101,8 +90,7 @@ float Snejk::get_rotation_y() {
 }
 
 void Snejk::add_node(const float size_multiplier) {
-    move_speed += 0.0005f;
-    turn_speed += 0.0001;
+    speed_up();
 
     auto new_node = Node();
     new_node.set_geometry(_shape);
@@ -141,9 +129,12 @@ float Snejk::get_radius() {
 }
 
 void Snejk::speed_up() {
-    speed_up_timer = 0.0f;
-    is_sped_up = true;
-    move_speed = max_speed;
+    move_speed += move_speed_factor;
+    turn_speed += turn_speed_factor;
+    if(glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) > segment_distance) {
+        std::cout <<  glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) << std::endl;
+        _tail_segment_offset--;
+    }
 }
 
 int Snejk::get_points() {
