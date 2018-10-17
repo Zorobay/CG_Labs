@@ -57,10 +57,10 @@ createSpecialFood() {
         } else 
         if (kind < 20){
             //speed and points
-           texture_img = "sneeek.png";
+            texture_img = "lightblue.png";
         } else {
             //normal
-            texture_img = "bluesnek.png";
+           texture_img = "sneeek.png";
         } 
         food_node.add_texture("diffuse_texture", bonobo::loadTexture2D(texture_img), GL_TEXTURE_2D);
         return food_node;
@@ -91,6 +91,8 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
         food.push_back(food_node);
     }
 }
+
+
 
 void
 edaf80::Assignment5::run() {
