@@ -97,17 +97,18 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
         float x_pos = dist(ran_gen);
         float z_pos = dist(ran_gen);
 
-        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3)
+        glm::vec3 food_pos = glm::vec3(x_pos, 0.0, z_pos);
+
+        while (glm::length(food_pos - snek_pos) < 3 || glm::length(food_pos) > world_radi*0.5)
         {
-            x_pos = dist(ran_gen);
-            z_pos = dist(ran_gen);
-            std::cout << "snake was too close, " << x_pos << ", " << z_pos << " is new position\n";
+            food_pos.x = dist(ran_gen);
+            food_pos.z = dist(ran_gen);
         }
 
         auto food_node = Node();
         food_node.set_geometry(shape);
         food_node.set_scaling(glm::vec3(food_radi * 0.8));
-        food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
+        food_node.set_translation(food_pos);
         food_node.set_program(program, set_uniforms);
         food.push_back(makeSpecial(food_node));
     }
@@ -115,16 +116,18 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
 
 void edaf80::Assignment5::run()
 {
+    float max_radius = world_radi*0.5;
 
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
     auto quad_shape = parametric_shapes::createQuad(world_radi*2.1, world_radi*2.1, 30.0f);
-    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi*0.5);
+    auto circle_shape = parametric_shapes::createQuad(world_radi, world_radi, 30);
     if (sphere_shape.vao == 0u | quad_shape.vao == 0u | circle_shape.vao == 0u)
     {
         LogError("Failed to retrieve the circle ring mesh");
         return;
     }
+
     // Load obj files
     std::vector<bonobo::mesh_data> objects = bonobo::loadObjects("low_poly_trees.obj");
     if (objects.empty())
@@ -191,6 +194,15 @@ void edaf80::Assignment5::run()
         LogError("Failed to load blinn phong normal shader");
     }
 
+    GLuint circle_plane_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/circle_plane.vert"},
+                                              {ShaderType::fragment, "EDAF80/circle_plane.frag"}},
+                                             circle_plane_shader);
+    if (circle_plane_shader == 0u)
+    {
+        LogError("Failed to load circle_plane shader");
+    }
+
     GLuint blinn_phong_shader = 0u;
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/blinn_phong.vert"},
                                               {ShaderType::fragment, "EDAF80/blinn_phong.frag"}},
@@ -217,9 +229,10 @@ void edaf80::Assignment5::run()
 
     // Setup diffuse uniforms
     auto color = glm::vec3(0.5, 0.3, 0.1);
-    auto const diffuse_uniforms = [&light_position, &color](GLuint program) {
+    auto const diffuse_uniforms = [&light_position, &color, &max_radius](GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
         glUniform3fv(glGetUniformLocation(program, "color"), 1, glm::value_ptr(color));
+        glUniform1f(glGetUniformLocation(program, "max_radius"), max_radius);
     };
 
     // Blinn phong uniforms
@@ -282,18 +295,19 @@ void edaf80::Assignment5::run()
     water_node.set_program(&water_shader, water_uniforms);
     water_node.add_texture("reflection_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
     water_node.add_texture("bump_map", waves_bump_id, GL_TEXTURE_2D);
-    water_node.translate(glm::vec3(0.0, -3.0, 0.0));
+    water_node.translate(glm::vec3(0.0, -1.8, 0.0));
 
     auto plane_node = Node();
     plane_node.set_geometry(circle_shape);
-    plane_node.set_program(&default_shader, diffuse_uniforms);
+    plane_node.set_program(&circle_plane_shader, diffuse_uniforms);
     plane_node.add_texture("soil", bonobo::loadTexture2D("Soil.png"), GL_TEXTURE_2D);
     plane_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
 
     auto tree_node = Node();
     tree_node.set_geometry(tree);
     tree_node.set_program(&blinn_phong_shader, phong_set_uniforms);
-    tree_node.set_scaling(glm::vec3(0.05));
+    tree_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
+    tree_node.set_scaling(glm::vec3(0.08));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -307,6 +321,10 @@ void edaf80::Assignment5::run()
     bool shader_reload_failed = false;
 
     bool score_registered = false;
+
+    //glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glCullFace(GL_BACK);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -386,8 +404,8 @@ void edaf80::Assignment5::run()
             }
 
             mCamera.mWorld.SetTranslate(snake.get_position() +
-                                        glm::vec3(-snake.get_move_direction().x * 10, camera_y_disp,
-                                                  -snake.get_move_direction().z * 10));
+                                        glm::vec3(-snake.get_move_direction().x * snake.cameraFactor(), camera_y_disp,
+                                                  -snake.get_move_direction().z * snake.cameraFactor()));
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food

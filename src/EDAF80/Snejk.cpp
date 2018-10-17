@@ -21,13 +21,18 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     _set_uniforms = set_uniforms;
     _shape = shape;
     _world_radi = world_radi;
+<<<<<<< HEAD
     speed_multi = 1.0f;
     score_multi = 1.0f;
+=======
+    _cameraDistance = 7.0;
+    zoom_out_buffer = 0;
+>>>>>>> 83ddc906e0d5a7c1db21114bdea267ea1ed75143
 
     head_node.set_program(_shader, _set_uniforms);
     head_node.set_geometry(_shape);
     head_node.set_translation(head_position);
-    head_node.set_scaling(glm::vec3(_head_radi));
+    head_node.set_scaling(glm::vec3(_head_radi, _head_radi*0.7, _head_radi*0.9));
     head_node.add_texture("normal_map", _texture_bump, GL_TEXTURE_2D);
     head_node.add_texture("diffuse_texture", _texture_diffuse, GL_TEXTURE_2D);
 
@@ -61,6 +66,12 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time)
         _nodes[i].set_translation(_positions[pos_i]);
         _nodes[i].set_rotation_y(_rotations[pos_i]);
         _nodes[i].render(world_to_clip, _nodes[i].get_transform());
+    }
+
+    if(zoom_out_buffer > 0)
+    {
+        zoom_out_buffer--;
+        increase_camera_distance();
     }
 
     _counter++;
@@ -110,6 +121,7 @@ float Snejk::get_rotation_y()
 void Snejk::add_node(const float size_multiplier)
 {
     speed_up();
+    zoom_out_buffer = 10;
 
     auto new_node = Node();
     new_node.set_geometry(_shape);
@@ -162,6 +174,11 @@ glm::vec3 Snejk::get_move_direction()
     return move_direction;
 }
 
+void Snejk::increase_camera_distance()
+{
+    _cameraDistance += 0.01;
+}
+
 float Snejk::get_radius()
 {
     return _head_radi;
@@ -210,6 +227,7 @@ void Snejk::reset()
     _rotations.clear();
     _counter = 0;
     _rotation = glm::half_pi<float>();
+    _cameraDistance = 7.0;
 
     // Push buffer
     for (int i = 0; i < 100; i++)
@@ -225,4 +243,8 @@ void Snejk::reset()
 void Snejk::inc_speed_score_multi(){
     speed_multi += 1.05f;
     score_multi += 1.05f;
+}
+float Snejk::cameraFactor()
+{
+    return _cameraDistance;
 }

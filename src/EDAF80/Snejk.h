@@ -32,12 +32,15 @@ class Snejk
     void disable_movement();
     void reset();
     void inc_speed_score_multi();
+    float cameraFactor();
+    void increase_camera_distance();
 
   private:
     int points = 0;
     GLuint const *_shader;
     std::function<void(GLuint)> _set_uniforms;
     bonobo::mesh_data _shape;
+    float _cameraDistance;
     GLuint _texture_bump = bonobo::loadTexture2D("fieldstone_bump.png");
     GLuint _texture_diffuse = bonobo::loadTexture2D("bluesnek.png");
     std::vector<Node> _nodes;
@@ -53,10 +56,11 @@ class Snejk
     float turn_speed;
     const float base_move_speed = 0.005;
     const float base_turn_speed = 0.006;
-    const float move_speed_factor = 0.0001;
+    const float move_speed_factor = 0.0002;
     const float turn_speed_factor = 0.00003;
     const float segment_distance = 1.7f;
     float _world_radi;
+    int zoom_out_buffer;
     bool alive = true;
     float speed_multi;
     float score_multi;
