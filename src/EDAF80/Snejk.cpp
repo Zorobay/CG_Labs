@@ -38,10 +38,6 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
 
 void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
 
-    // Check if dead
-    if (!isAlive()){
-        return;
-    }
     // Move head
     head_position += move_direction * delta_time * move_speed;
     head_node.set_translation(head_position);
@@ -56,7 +52,6 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time) {
         _nodes[i].set_translation(_positions[pos_i]);
         _nodes[i].render(world_to_clip, _nodes[i].get_transform());
     }
-
 
     _counter++;
 }
@@ -95,8 +90,7 @@ float Snejk::get_rotation_y() {
 }
 
 void Snejk::add_node(const float size_multiplier) {
-    move_speed += 0.0005f;
-    turn_speed += 0.0001;
+    speed_up();
 
     auto new_node = Node();
     new_node.set_geometry(_shape);
@@ -117,7 +111,7 @@ void Snejk::add_node() {
 }
 
 // Function that tests for collision between head and tail
-bool Snejk::isAlive() {
+bool Snejk::is_alive() {
     for (Node n: _nodes) {
         if (_tail_radi + 1.0f > glm::distance(n.get_translation(), head_position)) {//distance of center < tail + head radi
             return false;
@@ -132,6 +126,15 @@ glm::vec3 Snejk::get_move_direction() {
 
 float Snejk::get_radius() {
     return _head_radi;
+}
+
+void Snejk::speed_up() {
+    move_speed += move_speed_factor;
+    turn_speed += turn_speed_factor;
+    if(glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) > segment_distance) {
+        std::cout <<  glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) << std::endl;
+        _tail_segment_offset--;
+    }
 }
 
 
