@@ -4,6 +4,7 @@
 #include "core/InputHandler.h"
 #include "core/FPSCamera.h"
 #include "Snejk.h"
+#include "Food.hpp"
 #include "core/WindowManager.hpp"
 #include <random>
 
@@ -43,7 +44,7 @@ namespace edaf80 {
         GLFWwindow *window;
         const float world_radi = 50.0f;
         const float food_radi = 0.3f;
-        std::vector<Node> food;
+        std::vector<Food> food;
         const float camera_y_disp = 5.0f;
         const float camera_z_disp = 8.0f;
         std::vector<int> highscores;

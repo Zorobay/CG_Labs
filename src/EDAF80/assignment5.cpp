@@ -9,6 +9,7 @@
 #include "core/Misc.h"
 #include "core/ShaderProgramManager.hpp"
 #include "Snejk.h"
+#include "Food.hpp"
 #include "parametric_shapes.hpp"
 
 #include <imgui.h>
@@ -43,11 +44,11 @@ edaf80::Assignment5::~Assignment5() {
     Log::View::Destroy();
 }
 
-Node 
-createSpecialFood() {
-        auto food_node = Node();
+Food makeSpecial(Node food_node) {
         int kind = rand() % 100;
         std::string texture_img = "";
+        Food food_man = Food();
+
         if(kind < 5){
             //redbull
             texture_img = "redsneek.png";
@@ -64,7 +65,8 @@ createSpecialFood() {
            texture_img = "sneeek.png";
         } 
         food_node.add_texture("diffuse_texture", bonobo::loadTexture2D(texture_img), GL_TEXTURE_2D);
-        return food_node;
+        food_man.new_node(food_node);
+        return food_man;
 }
 
 void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
@@ -84,12 +86,12 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
             std::cout << "snake was too close, " << x_pos << ", " << z_pos << " is new position\n";
         }
 
-        auto food_node = createSpecialFood();
+        auto food_node = Node();
         food_node.set_geometry(shape);
         food_node.set_scaling(glm::vec3(food_radi * 0.8));
         food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
         food_node.set_program(program, set_uniforms);
-        food.push_back(food_node);
+        food.push_back(makeSpecial(food_node));
     }
 }
 
@@ -323,7 +325,7 @@ edaf80::Assignment5::run() {
 
             // Render food
             for (size_t i = 0; i < food.size(); i++) {
-                Node f = food[i];
+                Food f = food[i];
                 // If food is eaten, remove it and make snake longer
                 if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())) {
                     snake.add_node();
@@ -352,7 +354,7 @@ edaf80::Assignment5::run() {
             }
 
             for (size_t i = 0; i < highscores.size(); i++) {
-                ImGui::Text("%d. %d", i+1, highscores[highscores.size()-1 -i]);
+                ImGui::Text("%lu. %d", i+1, highscores[highscores.size()-1 -i]);
             }
         }
         ImGui::End();
