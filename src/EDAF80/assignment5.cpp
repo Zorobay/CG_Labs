@@ -46,21 +46,23 @@ Node
 createSpecialFood() {
         auto food_node = Node();
         int kind = rand() % 100;
-        std::string texture_img = "fieldstone_bump.png";
+        std::string texture_img = "";
         if(kind < 5){
             //redbull
+            texture_img = "redsnek.png";
         } else 
         if (kind < 10){
             //confusion
+            texture_img = "confused.png";
         } else 
         if (kind < 20){
             //speed and points
-           texture_img = "redbull.png";
+           texture_img = "sneeek.png";
         } else {
             //normal
-            texture_img = "redbull.png";
+            texture_img = "c.png";
         } 
-        //food_node.add_texture("normal_map", bonobo::loadTexture2D("holes_diffuse.png"), GL_TEXTURE_2D);
+        food_node.add_texture("diffuse_texture", bonobo::loadTexture2D(texture_img), GL_TEXTURE_2D);
         return food_node;
 }
 
@@ -83,7 +85,6 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
 
         auto food_node = createSpecialFood();
         food_node.set_geometry(shape);
-        food_node.add_texture("diffuse_texture", bonobo::loadTexture2D("test.png"), GL_TEXTURE_2D);
         food_node.set_scaling(glm::vec3(food_radi * 0.8));
         food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
         food_node.set_program(program, set_uniforms);
@@ -212,7 +213,7 @@ edaf80::Assignment5::run() {
                                                   skybox + "/negy.png", skybox + "/posz.png", skybox + "/negz.png",
                                                   true);
 
-    auto waves_bump_id = bonobo::loadTexture2D("waves.png");
+    auto waves_bump_id = bonobo::loadTexture2D("sneeek.png");
 
     // Create snake
     auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape, world_radi);
