@@ -57,7 +57,7 @@ createSpecialFood() {
         } else {
             //normal
         } 
-        GLuint texture = bonobo::loadTexture2D("fieldstone_bump.png");
+        GLuint texture = bonobo::loadTexture2D("marble.png");
         food_node.add_texture("normal_map", texture, GL_TEXTURE_2D);
         return food_node;
 }

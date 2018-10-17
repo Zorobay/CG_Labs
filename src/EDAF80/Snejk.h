@@ -11,6 +11,7 @@
 #include "core/ShaderProgramManager.hpp"
 #include "core/InputHandler.h"
 #include <ctime>
+#include <cmath>
 
 
 
@@ -40,6 +41,7 @@ private:
     std::vector<Node> _nodes;
     std::vector<glm::vec3> _positions;
     std::vector<glm::vec3> _directions;
+    std::vector<float> _rotations;
     size_t _counter = 0;
     float _rotation = glm::half_pi<float>();
     const float _tail_radi = 0.5f;
@@ -51,7 +53,7 @@ private:
     const float base_turn_speed = 0.006;
     const float move_speed_factor = 0.0001;
     const float turn_speed_factor = 0.00003;
-    const float segment_distance = 2.0f;
+    const float segment_distance = 1.7f;
 
 //    float speed_up_timer = 0.0f;
 //    const float max_speed = base_move_speed * 2.0f;
