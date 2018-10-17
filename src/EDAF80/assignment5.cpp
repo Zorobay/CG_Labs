@@ -83,24 +83,25 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
 {
     std::random_device rd;      // Seed
     std::mt19937 ran_gen(rd()); // Random generator
-    std::uniform_int_distribution<int> dist(-world_radi, world_radi);
+    std::uniform_int_distribution<int> dist(-world_radi*0.5, world_radi*0.5);
 
     for (size_t i = 0; i < amount; i++)
     {
         float x_pos = dist(ran_gen);
         float z_pos = dist(ran_gen);
 
-        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3)
+        glm::vec3 food_pos = glm::vec3(x_pos, 0.0, z_pos);
+
+        while (glm::length(food_pos - snek_pos) < 3 || glm::length(food_pos) > world_radi*0.5)
         {
-            x_pos = dist(ran_gen);
-            z_pos = dist(ran_gen);
-            std::cout << "snake was too close, " << x_pos << ", " << z_pos << " is new position\n";
+            food_pos.x = dist(ran_gen);
+            food_pos.z = dist(ran_gen);
         }
 
         auto food_node = Node();
         food_node.set_geometry(shape);
         food_node.set_scaling(glm::vec3(food_radi * 0.8));
-        food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
+        food_node.set_translation(food_pos);
         food_node.set_program(program, set_uniforms);
         food.push_back(makeSpecial(food_node));
     }
@@ -108,6 +109,7 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
 
 void edaf80::Assignment5::run()
 {
+    float max_radius = world_radi*0.5;
 
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
@@ -118,8 +120,6 @@ void edaf80::Assignment5::run()
         LogError("Failed to retrieve the circle ring mesh");
         return;
     }
-
-    float max_radius = world_radi*0.5;
 
     // Load obj files
     std::vector<bonobo::mesh_data> objects = bonobo::loadObjects("low_poly_trees.obj");
@@ -288,7 +288,7 @@ void edaf80::Assignment5::run()
     water_node.set_program(&water_shader, water_uniforms);
     water_node.add_texture("reflection_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
     water_node.add_texture("bump_map", waves_bump_id, GL_TEXTURE_2D);
-    water_node.translate(glm::vec3(0.0, -3.0, 0.0));
+    water_node.translate(glm::vec3(0.0, -1.8, 0.0));
 
     auto plane_node = Node();
     plane_node.set_geometry(circle_shape);
@@ -299,7 +299,8 @@ void edaf80::Assignment5::run()
     auto tree_node = Node();
     tree_node.set_geometry(tree);
     tree_node.set_program(&blinn_phong_shader, phong_set_uniforms);
-    tree_node.set_scaling(glm::vec3(0.05));
+    tree_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
+    tree_node.set_scaling(glm::vec3(0.08));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -313,6 +314,10 @@ void edaf80::Assignment5::run()
     bool shader_reload_failed = false;
 
     bool score_registered = false;
+
+    //glEnable(GL_CULL_FACE);
+    glCullFace(GL_FRONT);
+    glCullFace(GL_BACK);
 
     while (!glfwWindowShouldClose(window))
     {
@@ -392,8 +397,8 @@ void edaf80::Assignment5::run()
             }
 
             mCamera.mWorld.SetTranslate(snake.get_position() +
-                                        glm::vec3(-snake.get_move_direction().x * 7, camera_y_disp,
-                                                  -snake.get_move_direction().z * 7));
+                                        glm::vec3(-snake.get_move_direction().x * snake.cameraFactor(), camera_y_disp,
+                                                  -snake.get_move_direction().z * snake.cameraFactor()));
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food

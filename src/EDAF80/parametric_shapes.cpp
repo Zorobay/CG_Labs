@@ -29,8 +29,8 @@ parametric_shapes::createQuad(unsigned int width, unsigned int height, unsigned 
     {
         for (size_t col = 0; col < resolution; col++)
         {
-            vertices[index] = glm::vec3(col * width_step - (static_cast<float>(width) / 2), 0,
-                                        row * height_step - (static_cast<float>(height) / 2));
+            vertices[index] = glm::vec3(col * width_step - (static_cast<float>(width) / 2.0), 0,
+                                        row * height_step - (static_cast<float>(height) / 2.0));
             //            vertices[index] = glm::vec3(col * width_step, 0,
             //                                        row * height_step);
 

@@ -21,6 +21,8 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     _set_uniforms = set_uniforms;
     _shape = shape;
     _world_radi = world_radi;
+    _cameraDistance = 7.0;
+    zoom_out_buffer = 0;
 
     head_node.set_program(_shader, _set_uniforms);
     head_node.set_geometry(_shape);
@@ -59,6 +61,12 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time)
         _nodes[i].set_translation(_positions[pos_i]);
         _nodes[i].set_rotation_y(_rotations[pos_i]);
         _nodes[i].render(world_to_clip, _nodes[i].get_transform());
+    }
+
+    if(zoom_out_buffer > 0)
+    {
+        zoom_out_buffer--;
+        increase_camera_distance();
     }
 
     _counter++;
@@ -108,6 +116,7 @@ float Snejk::get_rotation_y()
 void Snejk::add_node(const float size_multiplier)
 {
     speed_up();
+    zoom_out_buffer = 10;
 
     auto new_node = Node();
     new_node.set_geometry(_shape);
@@ -160,6 +169,11 @@ glm::vec3 Snejk::get_move_direction()
     return move_direction;
 }
 
+void Snejk::increase_camera_distance()
+{
+    _cameraDistance += 0.01;
+}
+
 float Snejk::get_radius()
 {
     return _head_radi;
@@ -206,6 +220,7 @@ void Snejk::reset()
     _rotations.clear();
     _counter = 0;
     _rotation = glm::half_pi<float>();
+    _cameraDistance = 7.0;
 
     // Push buffer
     for (int i = 0; i < 100; i++)
@@ -216,4 +231,9 @@ void Snejk::reset()
     }
 
     alive = true;
+}
+
+float Snejk::cameraFactor()
+{
+    return _cameraDistance;
 }
