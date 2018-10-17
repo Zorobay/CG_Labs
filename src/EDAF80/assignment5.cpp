@@ -327,7 +327,7 @@ void edaf80::Assignment5::run()
     glCullFace(GL_BACK);
 
     std::vector<std::pair<glm::vec3, float>> obstacles = std::vector<std::pair<glm::vec3, float>>();
-    obstacles.push_back(std::make_pair(tree_node.get_translation(), 0.3));
+    obstacles.push_back(std::make_pair(tree_node.get_translation()+glm::vec3(-0.2,0,0.5), 0.3));
 
     while (!glfwWindowShouldClose(window))
     {
