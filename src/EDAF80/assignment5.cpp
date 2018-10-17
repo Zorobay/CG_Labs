@@ -72,7 +72,8 @@ edaf80::Assignment5::run() {
 
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
-    if (sphere_shape.vao == 0u) {
+    auto quad_shape = parametric_shapes::createQuad(world_radi*2.5, world_radi*2.5, 20.0f);
+    if (sphere_shape.vao == 0u | quad_shape.vao == 0u) {
         LogError("Failed to retrieve the circle ring mesh");
         return;
     }
@@ -125,11 +126,21 @@ edaf80::Assignment5::run() {
         LogError("Failed to load normal map shader");
     }
 
+    GLuint water_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/water.vert"},
+                                              {ShaderType::fragment, "EDAF80/water.frag"}},
+                                              water_shader);
+    if (water_shader == 0u) {
+        LogError("Failed to load water shader");
+    }
+
+    // Setup fallback uniforms
     auto light_position = glm::vec3(-2.0f, 4.0f, 2.0f);
     auto const set_uniforms = [&light_position](GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
     };
 
+    // Setup diffuse uniforms
     auto color = glm::vec3(0.5, 0.3, 0.1);
     auto const diffuse_uniforms = [&light_position, &color](GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
@@ -152,22 +163,52 @@ edaf80::Assignment5::run() {
         glUniform1f(glGetUniformLocation(program, "shininess"), shininess);
     };
 
-    // Create snake
-    auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape);
+    // Setup water uniforms
+    auto t = 1.0f;
+    auto color_deep = glm::vec4(0.0, 0.0, 0.1, 1.0);
+    auto color_shallow = glm::vec4(0.0, 0.4, 0.4, 1.0);
+    float wave_amp1 = 1.5;
+    float wave_amp2 = 0.5;
+    auto dir1 = glm::vec2(-1.0, 0.0);
+    auto dir2 = glm::vec2(-0.7, 0.7);
+    auto const water_uniforms = [&light_position, &t, &camera_position, &color_deep, &color_shallow, &wave_amp1, &wave_amp2](
+            GLuint program) {
+        glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
+        glUniform3fv(glGetUniformLocation(program, "camera_position"), 1, glm::value_ptr(camera_position));
+        glUniform1f(glGetUniformLocation(program, "t"), t);
+        glUniform4fv(glGetUniformLocation(program, "color_deep"), 1, glm::value_ptr(color_deep));
+        glUniform4fv(glGetUniformLocation(program, "color_shallow"), 1, glm::value_ptr(color_shallow));
+        glUniform1f(glGetUniformLocation(program, "amp1"), wave_amp1);
+        glUniform1f(glGetUniformLocation(program, "amp2"), wave_amp2);
+    };
 
-    // Create food nodes
-    generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 20, snake.get_position());
-
-    // Create skybox
+    // Load textures
     std::string skybox = "opensea";
     auto cube_map_id = bonobo::loadTextureCubeMap(skybox + "/posx.png", skybox + "/negx.png", skybox + "/posy.png",
                                                   skybox + "/negy.png", skybox + "/posz.png", skybox + "/negz.png",
                                                   true);
+
+    auto waves_bump_id = bonobo::loadTexture2D("waves.png");
+
+    // Create snake
+    auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape);
+
+    // Create food nodes
+    generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 3, snake.get_position());
+
+
     auto skybox_node = Node();
     skybox_node.set_geometry(sphere_shape);
     skybox_node.set_program(&cube_map_shader, set_uniforms);
     skybox_node.set_scaling(glm::vec3(world_radi));
     skybox_node.add_texture(skybox + "_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
+
+    auto water_node = Node();
+    water_node.set_geometry(quad_shape);
+    water_node.set_program(&water_shader, water_uniforms);
+    water_node.add_texture("reflection_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
+    water_node.add_texture("bump_map", waves_bump_id, GL_TEXTURE_2D);
+    water_node.translate(glm::vec3(0.0, -2.0, 0.0));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -212,9 +253,10 @@ edaf80::Assignment5::run() {
 
         ImGui_ImplGlfwGL3_NewFrame();
 
-        //
-        // Todo: If you need to handle inputs, you can do it here
-        //
+        // Add to t
+        t += 0.001 * ddeltatime;
+
+        // Handle snake input
         snake.handle_input(inputHandler);
 
         int framebuffer_width, framebuffer_height;
@@ -225,9 +267,10 @@ edaf80::Assignment5::run() {
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
         if (!shader_reload_failed) {
-            //
-            // Todo: Render all your geometry here.
-            //
+            //Render water
+            water_node.render(mCamera.GetWorldToClipMatrix(), water_node.get_transform());
+
+            // Render skybox
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
             if (snake.is_alive()) {
                 snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
