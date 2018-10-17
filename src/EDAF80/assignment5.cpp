@@ -23,64 +23,75 @@
 #include <random>
 #include <algorithm>
 
-edaf80::Assignment5::Assignment5() :
-        mCamera(0.5f * glm::half_pi<float>(),
-                static_cast<float>(config::resolution_x) / static_cast<float>(config::resolution_y),
-                0.01f, 1000.0f),
-        inputHandler(), mWindowManager(), window(nullptr) {
+edaf80::Assignment5::Assignment5() : mCamera(0.5f * glm::half_pi<float>(),
+                                             static_cast<float>(config::resolution_x) / static_cast<float>(config::resolution_y),
+                                             0.01f, 1000.0f),
+                                     inputHandler(), mWindowManager(), window(nullptr)
+{
     Log::View::Init();
 
     WindowManager::WindowDatum window_datum{inputHandler, mCamera, config::resolution_x, config::resolution_y, 0, 0, 0,
                                             0};
 
     window = mWindowManager.CreateWindow("EDAF80: Assignment 5", window_datum, config::msaa_rate);
-    if (window == nullptr) {
+    if (window == nullptr)
+    {
         Log::View::Destroy();
         throw std::runtime_error("Failed to get a window: aborting!");
     }
 }
 
-edaf80::Assignment5::~Assignment5() {
+edaf80::Assignment5::~Assignment5()
+{
     Log::View::Destroy();
 }
 
-Food makeSpecial(Node food_node) {
-        int kind = rand() % 100;
-        std::string texture_img = "";
-        Food food_man = Food();
+Food makeSpecial(Node food_node)
+{
+    int kind = rand() % 100;
+    std::string texture_img = "";
+    Food food_man = Food();
 
-        if(kind < 5){
-            //redbull
-            texture_img = "redsneek.png";
-        } else 
-        if (kind < 10){
-            //confusion
-            texture_img = "purpl.png";
-        } else 
-        if (kind < 20){
-            //speed and points
-            texture_img = "lightblue.png";
-        } else {
-            //normal
-           texture_img = "sneeek.png";
-        } 
-        food_node.add_texture("diffuse_texture", bonobo::loadTexture2D(texture_img), GL_TEXTURE_2D);
-        food_man.new_node(food_node);
-        return food_man;
+    if (kind < 5)
+    {
+        //redbull
+        texture_img = "redsneek.png";
+    }
+    else if (kind < 10)
+    {
+        //confusion
+        texture_img = "purpl.png";
+    }
+    else if (kind < 20)
+    {
+        //speed and points
+        texture_img = "lightblue.png";
+    }
+    else
+    {
+        //normal
+        texture_img = "sneeek.png";
+    }
+    food_node.add_texture("diffuse_texture", bonobo::loadTexture2D(texture_img), GL_TEXTURE_2D);
+    food_man.new_node(food_node);
+    return food_man;
 }
 
 void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
                                         std::function<void(GLuint)> const &set_uniforms, size_t amount,
-                                        glm::vec3 snek_pos) {
-    std::random_device rd; // Seed
+                                        glm::vec3 snek_pos)
+{
+    std::random_device rd;      // Seed
     std::mt19937 ran_gen(rd()); // Random generator
     std::uniform_int_distribution<int> dist(-world_radi, world_radi);
 
-    for (size_t i = 0; i < amount; i++) {
+    for (size_t i = 0; i < amount; i++)
+    {
         float x_pos = dist(ran_gen);
         float z_pos = dist(ran_gen);
 
-        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3) {
+        while (glm::length(glm::vec3(x_pos, 0.0f, z_pos) - snek_pos) < 3)
+        {
             x_pos = dist(ran_gen);
             z_pos = dist(ran_gen);
             std::cout << "snake was too close, " << x_pos << ", " << z_pos << " is new position\n";
@@ -95,22 +106,22 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
     }
 }
 
-
-
-void
-edaf80::Assignment5::run() {
+void edaf80::Assignment5::run()
+{
 
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
-    auto quad_shape = parametric_shapes::createQuad(world_radi*2.1, world_radi*2.1, 30.0f);
-    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi*0.8);
-    if (sphere_shape.vao == 0u | quad_shape.vao == 0u) {
+    auto quad_shape = parametric_shapes::createQuad(world_radi * 2.1, world_radi * 2.1, 30.0f);
+    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi * 0.8);
+    if (sphere_shape.vao == 0u | quad_shape.vao == 0u)
+    {
         LogError("Failed to retrieve the circle ring mesh");
         return;
     }
     // Load obj files
     std::vector<bonobo::mesh_data> objects = bonobo::loadObjects("low_poly_trees.obj");
-    if (objects.empty()) {
+    if (objects.empty())
+    {
         LogError("Failed to load the trees geometry: exiting.");
 
         Log::View::Destroy();
@@ -127,60 +138,67 @@ edaf80::Assignment5::run() {
     // Create the shader programs
     ShaderProgramManager program_manager;
     GLuint fallback_shader = 0u;
-    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/fallback.vert"},
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/fallback.vert"},
                                               {ShaderType::fragment, "EDAF80/fallback.frag"}},
                                              fallback_shader);
-    if (fallback_shader == 0u) {
+    if (fallback_shader == 0u)
+    {
         LogError("Failed to load fallback shader");
         return;
     }
 
     GLuint default_shader = 0u;
-    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/default.vert"},
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/default.vert"},
                                               {ShaderType::fragment, "EDAF80/default.frag"}},
                                              default_shader);
-    if (default_shader == 0u) {
+    if (default_shader == 0u)
+    {
         LogError("Failed to load default shader");
         return;
     }
     GLuint diffuse_shader = 0u;
-    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/diffuse.vert"},
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/diffuse.vert"},
                                               {ShaderType::fragment, "EDAF80/diffuse.frag"}},
                                              diffuse_shader);
-    if (diffuse_shader == 0u) {
+    if (diffuse_shader == 0u)
+    {
         LogError("Failed to load diffuse shader");
         return;
     }
 
     GLuint cube_map_shader = 0u;
-    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/cubemap.vert"},
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/cubemap.vert"},
                                               {ShaderType::fragment, "EDAF80/cubemap.frag"}},
                                              cube_map_shader);
-    if (cube_map_shader == 0u) {
+    if (cube_map_shader == 0u)
+    {
         LogError("Failed to load cubemap shader");
     }
 
     GLuint blinn_phong_normal_shader = 0u;
-    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phong_normal.vert"},
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/blinn_phong_normal.vert"},
                                               {ShaderType::fragment, "EDAF80/blinn_phong_normal.frag"}},
                                              blinn_phong_normal_shader);
-    if (blinn_phong_normal_shader == 0u) {
+    if (blinn_phong_normal_shader == 0u)
+    {
         LogError("Failed to load blinn phong normal shader");
     }
 
     GLuint blinn_phong_shader = 0u;
-    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phong.vert"},
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/blinn_phong.vert"},
                                               {ShaderType::fragment, "EDAF80/blinn_phong.frag"}},
                                              blinn_phong_shader);
-    if (blinn_phong_shader == 0u) {
+    if (blinn_phong_shader == 0u)
+    {
         LogError("Failed to load blinn phong shader");
     }
 
     GLuint water_shader = 0u;
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex, "EDAF80/water.vert"},
                                               {ShaderType::fragment, "EDAF80/water.frag"}},
-                                              water_shader);
-    if (water_shader == 0u) {
+                                             water_shader);
+    if (water_shader == 0u)
+    {
         LogError("Failed to load water shader");
     }
 
@@ -204,7 +222,7 @@ edaf80::Assignment5::run() {
     auto specular = glm::vec3(1.0f, 1.0f, 1.0f);
     auto shininess = 1.0f;
     auto const phong_set_uniforms = [&light_position, &camera_position, &ambient, &diffuse, &specular, &shininess](
-            GLuint program) {
+                                        GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
         glUniform3fv(glGetUniformLocation(program, "camera_position"), 1, glm::value_ptr(camera_position));
         glUniform3fv(glGetUniformLocation(program, "ambient"), 1, glm::value_ptr(ambient));
@@ -222,7 +240,7 @@ edaf80::Assignment5::run() {
     auto dir1 = glm::vec2(-1.0, 0.0);
     auto dir2 = glm::vec2(-0.7, 0.7);
     auto const water_uniforms = [&light_position, &t, &camera_position, &color_deep, &color_shallow, &wave_amp1, &wave_amp2](
-            GLuint program) {
+                                    GLuint program) {
         glUniform3fv(glGetUniformLocation(program, "light_position"), 1, glm::value_ptr(light_position));
         glUniform3fv(glGetUniformLocation(program, "camera_position"), 1, glm::value_ptr(camera_position));
         glUniform1f(glGetUniformLocation(program, "t"), t);
@@ -283,10 +301,12 @@ edaf80::Assignment5::run() {
 
     bool score_registered = false;
 
-    while (!glfwWindowShouldClose(window)) {
+    while (!glfwWindowShouldClose(window))
+    {
         nowTime = GetTimeMilliseconds();
         ddeltatime = nowTime - lastTime;
-        if (nowTime > fpsNextTick) {
+        if (nowTime > fpsNextTick)
+        {
             fpsNextTick += 1000.0;
             fpsSamples = 0;
         }
@@ -304,7 +324,8 @@ edaf80::Assignment5::run() {
             show_logs = !show_logs;
         if (inputHandler.GetKeycodeState(GLFW_KEY_F2) & JUST_RELEASED)
             show_gui = !show_gui;
-        if (inputHandler.GetKeycodeState(GLFW_KEY_R) & JUST_PRESSED) {
+        if (inputHandler.GetKeycodeState(GLFW_KEY_R) & JUST_PRESSED)
+        {
             shader_reload_failed = !program_manager.ReloadAllPrograms();
             if (shader_reload_failed)
                 tinyfd_notifyPopup("Shader Program Reload Error",
@@ -312,7 +333,8 @@ edaf80::Assignment5::run() {
                                    "Rendering is suspended until the issue is solved. Once fixed, just reload the shaders again.",
                                    "error");
         }
-        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED && !snake.is_alive()) {
+        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED && !snake.is_alive())
+        {
             snake.reset();
         }
 
@@ -323,7 +345,8 @@ edaf80::Assignment5::run() {
 
         // Handle snake input
         snake.handle_input(inputHandler);
-        if (snake.is_alive()){
+        if (snake.is_alive())
+        {
             score_registered = false;
         }
 
@@ -334,7 +357,8 @@ edaf80::Assignment5::run() {
         glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         glClear(GL_DEPTH_BUFFER_BIT | GL_COLOR_BUFFER_BIT);
 
-        if (!shader_reload_failed) {
+        if (!shader_reload_failed)
+        {
             //Render water
             water_node.render(mCamera.GetWorldToClipMatrix(), water_node.get_transform());
             plane_node.render(mCamera.GetWorldToClipMatrix(), plane_node.get_transform());
@@ -346,9 +370,10 @@ edaf80::Assignment5::run() {
             //Render trees
             tree_node.render(mCamera.GetWorldToClipMatrix(), tree_node.get_transform());
 
-            if (!snake.is_alive() & !score_registered) { // Snake died
-                snake.disable_movement(); // Stop snake
-                highscores.push_back(snake.get_points()); // Register points
+            if (!snake.is_alive() & !score_registered)
+            {                                                    // Snake died
+                snake.disable_movement();                        // Stop snake
+                highscores.push_back(snake.get_points());        // Register points
                 std::sort(highscores.begin(), highscores.end()); // Sort highscores
                 score_registered = true;
             }
@@ -359,17 +384,21 @@ edaf80::Assignment5::run() {
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food
-            for (size_t i = 0; i < food.size(); i++) {
+            for (size_t i = 0; i < food.size(); i++)
+            {
                 Food f = food[i];
                 // If food is eaten, remove it and make snake longer
-                if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())) {
+                if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position()))
+                {
                     snake.add_node();
                     snake.speed_up();
                     snake.add_points(1);
                     food.erase(food.begin() + i);
                     generate_food(sphere_shape, &default_shader, diffuse_uniforms, 1,
                                   snake.get_position()); // Generate new food
-                } else {
+                }
+                else
+                {
                     f.render(mCamera.GetWorldToClipMatrix(), f.get_transform());
                 }
             }
@@ -377,19 +406,21 @@ edaf80::Assignment5::run() {
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        bool opened = ImGui::Begin("Stats", &opened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize |
-                                                     ImGuiWindowFlags_NoCollapse);
-        if (opened) {
+        bool opened = ImGui::Begin("Stats", &opened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize | ImGuiWindowFlags_NoCollapse);
+        if (opened)
+        {
             int p = snake.get_points();
             std::string message = "Points: " + std::to_string(p);
             ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
 
-            if (!snake.is_alive()) {
+            if (!snake.is_alive())
+            {
                 ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0), "You died! Click <Space> to restart.");
             }
 
-            for (size_t i = 0; i < std::min((int)highscores.size(), 10); i++) {
-                ImGui::Text("%lu. %d", i+1, highscores[highscores.size()-1 -i]);
+            for (size_t i = 0; i < std::min((int)highscores.size(), 10); i++)
+            {
+                ImGui::Text("%lu. %d", i + 1, highscores[highscores.size() - 1 - i]);
             }
         }
         ImGui::End();
@@ -404,13 +435,16 @@ edaf80::Assignment5::run() {
     }
 }
 
-
-int main() {
+int main()
+{
     Bonobo::Init();
-    try {
+    try
+    {
         edaf80::Assignment5 assignment5;
         assignment5.run();
-    } catch (std::runtime_error const &e) {
+    }
+    catch (std::runtime_error const &e)
+    {
         LogError(e.what());
     }
     Bonobo::Destroy();

@@ -10,8 +10,8 @@ void Food::new_node(Node node)
 {
     food_node = node;
 };
-	
-void Food::render(glm::mat4 const& WVP, glm::mat4 const& world) const
+
+void Food::render(glm::mat4 const &WVP, glm::mat4 const &world) const
 {
     food_node.render(WVP, world);
 };
