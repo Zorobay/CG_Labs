@@ -25,7 +25,7 @@ class Snejk
     glm::vec3 get_move_direction();
     float get_rotation_y();
     float get_radius();
-    bool is_alive();
+    bool is_alive(std::vector<std::pair<glm::vec3, float>> obstacles);
     void speed_up();
     int get_points();
     void add_points(int p);
@@ -55,7 +55,7 @@ class Snejk
     float move_speed;
     float turn_speed;
     const float base_move_speed = 0.005;
-    const float base_turn_speed = 0.006;
+    const float base_turn_speed = 0.003;
     const float move_speed_factor = 0.0002;
     const float turn_speed_factor = 0.00003;
     const float segment_distance = 1.7f;

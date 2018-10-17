@@ -306,7 +306,7 @@ void edaf80::Assignment5::run()
     auto tree_node = Node();
     tree_node.set_geometry(tree);
     tree_node.set_program(&blinn_phong_shader, phong_set_uniforms);
-    tree_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
+    tree_node.set_translation(glm::vec3(-4.0, -0.4, -14.0));
     tree_node.set_scaling(glm::vec3(0.08));
 
     glEnable(GL_DEPTH_TEST);
@@ -325,6 +325,9 @@ void edaf80::Assignment5::run()
     //glEnable(GL_CULL_FACE);
     glCullFace(GL_FRONT);
     glCullFace(GL_BACK);
+
+    std::vector<std::pair<glm::vec3, float>> obstacles = std::vector<std::pair<glm::vec3, float>>();
+    obstacles.push_back(std::make_pair(tree_node.get_translation(), 0.3));
 
     while (!glfwWindowShouldClose(window))
     {
@@ -358,7 +361,7 @@ void edaf80::Assignment5::run()
                                    "Rendering is suspended until the issue is solved. Once fixed, just reload the shaders again.",
                                    "error");
         }
-        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED && !snake.is_alive())
+        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED && !snake.is_alive(obstacles))
         {
             snake.reset();
         }
@@ -370,7 +373,7 @@ void edaf80::Assignment5::run()
 
         // Handle snake input
         snake.handle_input(inputHandler);
-        if (snake.is_alive())
+        if (snake.is_alive(obstacles))
         {
             score_registered = false;
         }
@@ -395,7 +398,7 @@ void edaf80::Assignment5::run()
             //Render trees
             tree_node.render(mCamera.GetWorldToClipMatrix(), tree_node.get_transform());
 
-            if (!snake.is_alive() & !score_registered)
+            if (!snake.is_alive(obstacles) & !score_registered)
             {                                                    // Snake died
                 snake.disable_movement();                        // Stop snake
                 highscores.push_back(snake.get_points());        // Register points
@@ -419,10 +422,18 @@ void edaf80::Assignment5::run()
                     snake.speed_up();
                     std::cout << f.kind() << " that food just died" << std::endl;
                     switch(f.kind()){
-                        case 0: break;
-                        case 1: snake.inc_speed_score_multi(); break;
-                        case 2: snake.add_points(10);break;
-                        case 3: snake.add_points(24);break;
+                        case 0:
+                            break;
+                        case 1:
+                            snake.inc_speed_score_multi();
+                            break;
+                        case 2:
+                            snake.add_points(10);
+                            break;
+                        case 3:
+                            snake.add_points(24);
+                            snake.inc_speed_score_multi();
+                            break;
                     }
                     snake.add_points(10);
                     food.erase(food.begin() + i);
@@ -445,7 +456,7 @@ void edaf80::Assignment5::run()
             std::string message = "Points: " + std::to_string(p);
             ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
 
-            if (!snake.is_alive())
+            if (!snake.is_alive(obstacles))
             {
                 ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0), "You died! Click <Space> to restart.");
             }

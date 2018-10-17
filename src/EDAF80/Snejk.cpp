@@ -60,8 +60,8 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time)
     for (size_t i = 0; i < _nodes.size(); i++)
     { // move all nodes
         size_t pos_i = std::min(_positions.size() - 1, (_positions.size() - 1 - (i + 1) * _tail_segment_offset));
-        _nodes[i].set_translation(_positions[pos_i]);
-        _nodes[i].set_rotation_y(_rotations[pos_i]);
+        _nodes[i].set_translation(_positions[pos_i-4]);
+        _nodes[i].set_rotation_y(_rotations[pos_i-4]);
         _nodes[i].render(world_to_clip, _nodes[i].get_transform());
     }
 
@@ -130,7 +130,7 @@ void Snejk::add_node(const float size_multiplier)
     _nodes.push_back(new_node);
 
     size_t pos_i = std::min(_positions.size() - 1, (_positions.size() - 1 - _nodes.size() * _tail_segment_offset));
-    new_node.set_translation(_positions[pos_i]);
+    new_node.set_translation(_positions[pos_i-4]);
 }
 
 void Snejk::add_node()
@@ -139,7 +139,7 @@ void Snejk::add_node()
 }
 
 // Function that tests for collision between head and tail
-bool Snejk::is_alive()
+bool Snejk::is_alive(std::vector<std::pair<glm::vec3, float>> obstacles)
 {
     if (!alive)
     {
@@ -161,6 +161,13 @@ bool Snejk::is_alive()
             std::cout << "ded" << std::endl;
             alive = false;
             return alive;
+        }
+    }
+
+    for(std::pair<glm::vec3, float> obs : obstacles){
+        if(glm::length(obs.first - head_position) < obs.second + _head_radi){
+            alive = false;
+            break;
         }
     }
 
@@ -199,7 +206,8 @@ int Snejk::get_points()
 
 void Snejk::add_points(int p)
 {
-    points += p * score_multi;
+    points += static_cast<float>(p) * score_multi;
+    std::cout << score_multi << std::endl;
 }
 
 void Snejk::disable_movement()
@@ -241,7 +249,7 @@ void Snejk::reset()
 
 void Snejk::inc_speed_score_multi(){
     speed_multi += 0.05f;
-    score_multi += 0.05f;
+    score_multi += 0.1f;
 }
 float Snejk::cameraFactor()
 {
