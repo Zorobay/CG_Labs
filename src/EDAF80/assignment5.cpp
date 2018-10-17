@@ -104,7 +104,7 @@ edaf80::Assignment5::run() {
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/diffuse.vert"},
                                               {ShaderType::fragment, "EDAF80/diffuse.frag"}},
                                              diffuse_shader);
-    if (diffuse_shader == 0u){
+    if (diffuse_shader == 0u) {
         LogError("Failed to load diffuse shader");
         return;
     }
@@ -176,7 +176,7 @@ edaf80::Assignment5::run() {
     double nowTime, lastTime = GetTimeMilliseconds();
     double fpsNextTick = lastTime + 1000.0;
 
-    bool show_logs = true;
+    bool show_logs = false;
     bool show_gui = true;
     bool shader_reload_failed = false;
 
@@ -229,7 +229,7 @@ edaf80::Assignment5::run() {
             // Todo: Render all your geometry here.
             //
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
-            if (snake.is_alive()){
+            if (snake.is_alive()) {
                 snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
             }
 
@@ -257,12 +257,14 @@ edaf80::Assignment5::run() {
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        bool opened = ImGui::Begin("Stats", &opened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
+        bool opened = ImGui::Begin("Stats", &opened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize |
+                                                     ImGuiWindowFlags_NoCollapse);
         if (opened) {
             int p = snake.get_points();
             std::string message = "Points: " + std::to_string(p);
             ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
         }
+        ImGui::End();
 
         if (show_logs)
             Log::View::Render();
