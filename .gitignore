@@ -9,6 +9,7 @@ cmake-build-debug/
 dependencies/
 
 # Resources folder
+/res
 res.zip
 
 # Application produced files
