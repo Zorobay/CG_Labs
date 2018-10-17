@@ -30,6 +30,7 @@ public:
     int get_points();
     void add_points(int p);
     void disable_movement();
+    void reset();
 
 private:
     int points = 0;
@@ -54,7 +55,7 @@ private:
     const float turn_speed_factor = 0.00003;
     const float segment_distance = 2.0f;
     float _world_radi;
-
+    bool alive = true;
 //    float speed_up_timer = 0.0f;
 //    const float max_speed = base_move_speed * 2.0f;
 //    bool is_sped_up = false;

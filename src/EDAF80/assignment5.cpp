@@ -20,6 +20,7 @@
 #include <glm/gtc/type_ptr.hpp>
 
 #include <random>
+#include <algorithm>
 
 edaf80::Assignment5::Assignment5() :
         mCamera(0.5f * glm::half_pi<float>(),
@@ -244,6 +245,8 @@ edaf80::Assignment5::run() {
     bool show_gui = true;
     bool shader_reload_failed = false;
 
+    bool score_registered = false;
+
     while (!glfwWindowShouldClose(window)) {
         nowTime = GetTimeMilliseconds();
         ddeltatime = nowTime - lastTime;
@@ -273,9 +276,8 @@ edaf80::Assignment5::run() {
                                    "Rendering is suspended until the issue is solved. Once fixed, just reload the shaders again.",
                                    "error");
         }
-        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED & !snake.is_alive()) {
-            int p_half = std::round((double)snake.get_points() / 2);
-            snake.add_points(-p_half);
+        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED && !snake.is_alive()) {
+            snake.reset();
         }
 
         ImGui_ImplGlfwGL3_NewFrame();
@@ -284,8 +286,9 @@ edaf80::Assignment5::run() {
         t += 0.001 * ddeltatime;
 
         // Handle snake input
+        snake.handle_input(inputHandler);
         if (snake.is_alive()){
-            snake.handle_input(inputHandler);
+            score_registered = false;
         }
 
         int framebuffer_width, framebuffer_height;
@@ -303,8 +306,11 @@ edaf80::Assignment5::run() {
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
 
-            if (!snake.is_alive()) {
-                snake.disable_movement();
+            if (!snake.is_alive() & !score_registered) { // Snake died
+                snake.disable_movement(); // Stop snake
+                highscores.push_back(snake.get_points()); // Register points
+                std::sort(highscores.begin(), highscores.end()); // Sort highscores
+                score_registered = true;
             }
 
             mCamera.mWorld.SetTranslate(snake.get_position() +
@@ -337,8 +343,13 @@ edaf80::Assignment5::run() {
             int p = snake.get_points();
             std::string message = "Points: " + std::to_string(p);
             ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
+
             if (!snake.is_alive()) {
-                ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0), "You died! Click <Space> to pay half your points and turn back time!");
+                ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0), "You died! Click <Space> to restart.");
+            }
+
+            for (size_t i = 0; i < highscores.size(); i++) {
+                ImGui::Text("%d. %d", i+1, highscores[highscores.size()-1 -i]);
             }
         }
         ImGui::End();
