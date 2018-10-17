@@ -176,7 +176,7 @@ edaf80::Assignment5::run() {
     double nowTime, lastTime = GetTimeMilliseconds();
     double fpsNextTick = lastTime + 1000.0;
 
-    bool show_logs = false;
+    bool show_logs = true;
     bool show_gui = true;
     bool shader_reload_failed = false;
 
@@ -245,6 +245,7 @@ edaf80::Assignment5::run() {
                 if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())) {
                     snake.add_node();
                     snake.speed_up();
+                    snake.add_points(1);
                     food.erase(food.begin() + i);
                     generate_food(sphere_shape, &diffuse_shader, diffuse_uniforms, 1,
                                   snake.get_position()); // Generate new food
@@ -256,9 +257,11 @@ edaf80::Assignment5::run() {
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        bool opened = ImGui::Begin("Stats", &opened, ImVec2(150, 50), -1.0f, 0);
+        bool opened = ImGui::Begin("Stats", &opened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize);
         if (opened) {
-            ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: " + )
+            int p = snake.get_points();
+            std::string message = "Points: " + std::to_string(p);
+            ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
         }
 
         if (show_logs)
