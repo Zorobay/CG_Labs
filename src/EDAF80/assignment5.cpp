@@ -230,7 +230,7 @@ edaf80::Assignment5::run() {
             //node.render(mCamera.GetWorldToClipMatrix(), node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
 
-            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(10,8,10));//glm::vec3(-snake.get_move_direction().x*10, camera_y_disp, -snake.get_move_direction().z*10));
+            mCamera.mWorld.SetTranslate(snake.get_position() + glm::vec3(-snake.get_move_direction().x*10, camera_y_disp, -snake.get_move_direction().z*10));
             mCamera.mWorld.LookAt(snake.get_position());
 
             // Render food
