@@ -42,10 +42,10 @@ namespace edaf80 {
         InputHandler inputHandler;
         WindowManager mWindowManager;
         GLFWwindow *window;
-        const float world_radi = 50.0f;
+        const float world_radi = 100.0f;
         const float food_radi = 0.3f;
-        std::vector<Food> food;
-        const float camera_y_disp = 5.0f;
+        std::vector<Food> food;     
+		const float camera_y_disp = 3.0f;
         const float camera_z_disp = 8.0f;
         std::vector<int> highscores;
     };

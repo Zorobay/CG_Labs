@@ -102,11 +102,23 @@ edaf80::Assignment5::run() {
 
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
-    auto quad_shape = parametric_shapes::createQuad(world_radi*2.5, world_radi*2.5, 20.0f);
+    auto quad_shape = parametric_shapes::createQuad(world_radi*2.1, world_radi*2.1, 30.0f);
+    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi*0.8);
     if (sphere_shape.vao == 0u | quad_shape.vao == 0u) {
         LogError("Failed to retrieve the circle ring mesh");
         return;
     }
+    // Load obj files
+    std::vector<bonobo::mesh_data> objects = bonobo::loadObjects("low_poly_trees.obj");
+    if (objects.empty()) {
+        LogError("Failed to load the trees geometry: exiting.");
+
+        Log::View::Destroy();
+        Log::Destroy();
+        return;
+    }
+    bonobo::mesh_data const &tree = objects.front();
+
     // Set up the camera
     mCamera.mWorld.SetTranslate(glm::vec3(0.0f, camera_y_disp, camera_z_disp));
     mCamera.mMouseSensitivity = 0.003f;
@@ -149,11 +161,19 @@ edaf80::Assignment5::run() {
     }
 
     GLuint blinn_phong_normal_shader = 0u;
-    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phon_normal.vert"},
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phong_normal.vert"},
                                               {ShaderType::fragment, "EDAF80/blinn_phong_normal.frag"}},
                                              blinn_phong_normal_shader);
     if (blinn_phong_normal_shader == 0u) {
-        LogError("Failed to load normal map shader");
+        LogError("Failed to load blinn phong normal shader");
+    }
+
+    GLuint blinn_phong_shader = 0u;
+    program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/blinn_phong.vert"},
+                                              {ShaderType::fragment, "EDAF80/blinn_phong.frag"}},
+                                             blinn_phong_shader);
+    if (blinn_phong_shader == 0u) {
+        LogError("Failed to load blinn phong shader");
     }
 
     GLuint water_shader = 0u;
@@ -179,8 +199,8 @@ edaf80::Assignment5::run() {
 
     // Blinn phong uniforms
     auto camera_position = mCamera.mWorld.GetTranslation();
-    auto ambient = glm::vec3(0.2f, 0.2f, 0.2f);
-    auto diffuse = glm::vec3(0.7f, 0.2f, 0.4f);
+    auto ambient = glm::vec3(0.3f, 0.1f, 0.0f);
+    auto diffuse = glm::vec3(0.7f, 0.3f, 0.0f);
     auto specular = glm::vec3(1.0f, 1.0f, 1.0f);
     auto shininess = 1.0f;
     auto const phong_set_uniforms = [&light_position, &camera_position, &ambient, &diffuse, &specular, &shininess](
@@ -195,10 +215,10 @@ edaf80::Assignment5::run() {
 
     // Setup water uniforms
     auto t = 1.0f;
-    auto color_deep = glm::vec4(0.0, 0.0, 0.1, 1.0);
-    auto color_shallow = glm::vec4(0.0, 0.4, 0.4, 1.0);
-    float wave_amp1 = 1.5;
-    float wave_amp2 = 0.5;
+    auto color_deep = glm::vec4(0.0, 0.0, 0.3, 1.0);
+    auto color_shallow = glm::vec4(0.2, 0.6, 0.7, 1.0);
+    float wave_amp1 = 1.0;
+    float wave_amp2 = 0.4;
     auto dir1 = glm::vec2(-1.0, 0.0);
     auto dir2 = glm::vec2(-0.7, 0.7);
     auto const water_uniforms = [&light_position, &t, &camera_position, &color_deep, &color_shallow, &wave_amp1, &wave_amp2](
@@ -237,7 +257,18 @@ edaf80::Assignment5::run() {
     water_node.set_program(&water_shader, water_uniforms);
     water_node.add_texture("reflection_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
     water_node.add_texture("bump_map", waves_bump_id, GL_TEXTURE_2D);
-    water_node.translate(glm::vec3(0.0, -2.0, 0.0));
+    water_node.translate(glm::vec3(0.0, -3.0, 0.0));
+
+    auto plane_node = Node();
+    plane_node.set_geometry(circle_shape);
+    plane_node.set_program(&default_shader, diffuse_uniforms);
+    plane_node.add_texture("soil", bonobo::loadTexture2D("Soil.png"), GL_TEXTURE_2D);
+    plane_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
+
+    auto tree_node = Node();
+    tree_node.set_geometry(tree);
+    tree_node.set_program(&blinn_phong_shader, phong_set_uniforms);
+    tree_node.set_scaling(glm::vec3(0.05));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -306,10 +337,14 @@ edaf80::Assignment5::run() {
         if (!shader_reload_failed) {
             //Render water
             water_node.render(mCamera.GetWorldToClipMatrix(), water_node.get_transform());
+            plane_node.render(mCamera.GetWorldToClipMatrix(), plane_node.get_transform());
 
             // Render skybox
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
             snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
+
+            //Render trees
+            tree_node.render(mCamera.GetWorldToClipMatrix(), tree_node.get_transform());
 
             if (!snake.is_alive() & !score_registered) { // Snake died
                 snake.disable_movement(); // Stop snake
@@ -353,7 +388,7 @@ edaf80::Assignment5::run() {
                 ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0), "You died! Click <Space> to restart.");
             }
 
-            for (size_t i = 0; i < highscores.size(); i++) {
+            for (size_t i = 0; i < std::min((int)highscores.size(), 10); i++) {
                 ImGui::Text("%lu. %d", i+1, highscores[highscores.size()-1 -i]);
             }
         }

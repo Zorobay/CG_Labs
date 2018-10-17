@@ -13,8 +13,6 @@
 #include <ctime>
 #include <cmath>
 
-
-
 class Snejk {
 public:
     Snejk(GLuint const* const shader, std::function<void (GLuint)> const& set_uniforms, bonobo::mesh_data const& shape, float world_radi);
