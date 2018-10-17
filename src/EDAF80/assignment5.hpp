@@ -31,21 +31,13 @@ namespace edaf80 {
         //! render loop.
         void run();
 
-        // Generate food for snake
-        void generate_food(bonobo::mesh_data const &shape, GLuint const *const program,
-                           std::function<void(GLuint)> const &set_uniforms, size_t amount, glm::vec3 snek_pos);
-
-
     private:
         FPSCameraf mCamera;
         InputHandler inputHandler;
         WindowManager mWindowManager;
         GLFWwindow *window;
         const float world_radi = 50.0f;
-        const float food_radi = 0.3f;
-        std::vector<Node> food;
         const float camera_y_disp = 5.0f;
         const float camera_z_disp = 8.0f;
-
     };
 }

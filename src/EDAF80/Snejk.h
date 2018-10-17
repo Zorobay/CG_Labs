@@ -28,6 +28,8 @@ public:
     float get_radius();
     bool is_alive();
     void speed_up();
+    void inc_speed_mult(float f);
+    void inc_point_mult(float f);
     int get_points();
     void add_points(int p);
     void disable_movement();
@@ -49,6 +51,8 @@ private:
     const float _head_radi = 0.8f;
     size_t _tail_segment_offset = 20;
     float move_speed;
+    float speed_mult;
+    float point_mult;
     float turn_speed;
     const float base_move_speed = 0.005;
     const float base_turn_speed = 0.006;

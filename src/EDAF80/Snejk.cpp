@@ -146,6 +146,14 @@ void Snejk::speed_up() {
     }
 }
 
+void Snejk::inc_speed_mult(float f){
+
+}
+
+void Snejk::inc_point_mult(float f){
+
+}
+
 int Snejk::get_points() {
     return points;
 }
