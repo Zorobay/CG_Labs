@@ -215,7 +215,7 @@ edaf80::Assignment5::run() {
                                                   skybox + "/negy.png", skybox + "/posz.png", skybox + "/negz.png",
                                                   true);
 
-    auto waves_bump_id = bonobo::loadTexture2D("sneeek.png");
+    auto waves_bump_id = bonobo::loadTexture2D("waves.png");
 
     // Create snake
     auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape, world_radi);
