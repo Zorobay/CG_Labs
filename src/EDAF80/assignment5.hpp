@@ -46,6 +46,6 @@ namespace edaf80 {
         std::vector<Node> food;
         const float camera_y_disp = 5.0f;
         const float camera_z_disp = 8.0f;
-
+        std::vector<int> highscores;
     };
 }

@@ -84,6 +84,7 @@ void Snejk::handle_input(InputHandler inputHandler) {
     if (inputHandler.GetKeycodeState(GLFW_KEY_N) & JUST_PRESSED) { //Add new body part
         add_node(_tail_radi);
     }
+
 }
 
 glm::vec3 Snejk::get_position() {
@@ -117,16 +118,25 @@ void Snejk::add_node() {
 
 // Function that tests for collision between head and tail
 bool Snejk::is_alive() {
+    if (!alive){
+        return alive;
+    }
+
+    // Died from going into wall
+    if (_world_radi < glm::distance(head_position, glm::vec3(0,0,0))) {
+        alive = false;
+        return alive;
+    }
+
+    // Died from slithering into self
     for (Node n: _nodes) {
-        if (_tail_radi + 1.0f > glm::distance(n.get_translation(), head_position)) {//distance of center < tail + head radi
-            return false;
+        if (_tail_radi + 1.0f > glm::distance(n.get_translation(), head_position)) {
+            alive = false;
+            return alive;
         }
     }
 
-    if (_world_radi < glm::distance(head_node.get_translation(), glm::vec3(0,0,0))) { // Outside world
-        return false;
-    }
-    return true;
+    return alive;
 }
 
 glm::vec3 Snejk::get_move_direction() {
@@ -155,8 +165,33 @@ void Snejk::add_points(int p) {
 }
 
 void Snejk::disable_movement() {
-    move_speed = 0;
-    turn_speed = 0;
+    move_speed = 0.0f;
+    turn_speed = 0.0f;
+}
+
+void Snejk::reset() {
+    points = 0;
+    move_speed = base_move_speed;
+    turn_speed = base_turn_speed;
+    _nodes.clear();
+    head_position = glm::vec3(0, 0, 0);
+    move_direction = glm::normalize(glm::vec3(0, 0, -1));
+
+    // Clear movement history
+    _positions.clear();
+    _directions.clear();
+    _rotations.clear();
+    _counter = 0;
+    _rotation = glm::half_pi<float>();
+
+    // Push buffer
+    for(int i = 0; i < 100; i++){
+        _positions.push_back(head_position);
+        _directions.push_back(move_direction);
+        _rotations.push_back(_rotation);
+    }
+
+    alive = true;
 }
 
 
