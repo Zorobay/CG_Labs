@@ -31,7 +31,7 @@ public:
     void add_points(int p);
 
 private:
-    int points;
+    int points = 0;
     GLuint const* _shader;
     std::function<void (GLuint)> _set_uniforms;
     bonobo::mesh_data _shape;

@@ -125,7 +125,7 @@ edaf80::Assignment5::run() {
     program_manager.CreateAndRegisterProgram({{ShaderType::vertex,   "EDAF80/diffuse.vert"},
                                               {ShaderType::fragment, "EDAF80/diffuse.frag"}},
                                              diffuse_shader);
-    if (diffuse_shader == 0u){
+    if (diffuse_shader == 0u) {
         LogError("Failed to load diffuse shader");
         return;
     }
@@ -250,7 +250,7 @@ edaf80::Assignment5::run() {
             // Todo: Render all your geometry here.
             //
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
-            if (snake.is_alive()){
+            if (snake.is_alive()) {
                 snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
             }
 
@@ -266,6 +266,7 @@ edaf80::Assignment5::run() {
                 if (food_radi + snake.get_radius() > glm::distance(f.get_translation(), snake.get_position())) {
                     snake.add_node();
                     snake.speed_up();
+                    snake.add_points(1);
                     food.erase(food.begin() + i);
                     generate_food(sphere_shape, &default_shader, diffuse_uniforms, 1,
                                   snake.get_position()); // Generate new food
@@ -277,9 +278,14 @@ edaf80::Assignment5::run() {
 
         glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-        bool opened = ImGui::Begin("Stats", &opened, ImVec2(150, 50), -1.0f, 0);
+        bool opened = ImGui::Begin("Stats", &opened, ImGuiWindowFlags_NoMove | ImGuiWindowFlags_AlwaysAutoResize |
+                                                     ImGuiWindowFlags_NoCollapse);
         if (opened) {
+            int p = snake.get_points();
+            std::string message = "Points: " + std::to_string(p);
+            ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
         }
+        ImGui::End();
 
         if (show_logs)
             Log::View::Render();
