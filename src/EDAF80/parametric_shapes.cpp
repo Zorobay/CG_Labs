@@ -475,21 +475,21 @@ parametric_shapes::createCircleRing(unsigned int const res_radius,
         for (unsigned int j = 0u; j < res_radius; ++j) {
             // vertex
             vertices[index] = glm::vec3(radius * cos_theta,
-                                        radius * sin_theta,
-                                        0.0f);
+                                        0.0f,
+                                        radius * sin_theta);
 
             // texture coordinates
             texcoords[index] = glm::vec3(static_cast<float>(j) / (static_cast<float>(res_radius) - 1.0f),
-                                         static_cast<float>(i) / (static_cast<float>(res_theta) - 1.0f),
-                                         0.0f);
+                                         0.0f,
+                                         static_cast<float>(i) / (static_cast<float>(res_theta) - 1.0f));
 
             // tangent
-            auto t = glm::vec3(cos_theta, sin_theta, 0.0f);
+            auto t = glm::vec3(cos_theta, 0.0f, sin_theta);
             t = glm::normalize(t);
             tangents[index] = t;
 
             // binormal
-            auto b = glm::vec3(-sin_theta, cos_theta, 0.0f);
+            auto b = glm::vec3(-sin_theta, 0.0f, cos_theta);
             b = glm::normalize(b);
             binormals[index] = b;
 

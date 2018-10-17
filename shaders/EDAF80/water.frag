@@ -49,18 +49,18 @@ void main()
     vec4 water_color = mix(color_deep, color_shallow, facing);
 
     // Calculate reflection
-    vec3 R = reflect(-V, N);
-    vec4 reflection_color = texture(reflection_cube_map, R);
+    //vec3 R = reflect(-V, N);
+    //vec4 reflection_color = texture(reflection_cube_map, R);
 
     // Calculate fresnel term
-    float R0 = 0.02037; // air to water
-    float fastFresnel = R0 + (1.0 - R0) * pow((1.0 - dot(V, N)), 5);
+    //float R0 = 0.02037; // air to water
+    //float fastFresnel = R0 + (1.0 - R0) * pow((1.0 - dot(V, N)), 5);
 
     // Refraction
-    vec3 incidence = normalize(light_position - fs_in.vertex);
-    vec3 Re = refract(-V, N, 1/1.33); // RÄTT NORMAL!? Rätt incidence??
-    vec3 refraction = texture(reflection_cube_map, Re).xyz;
-    vec4 refraction_color = vec4(refraction * (1 - fastFresnel), 1);
+    //vec3 incidence = normalize(light_position - fs_in.vertex);
+    //vec3 Re = refract(-V, N, 1/1.33); // RÄTT NORMAL!? Rätt incidence??
+    //vec3 refraction = texture(reflection_cube_map, Re).xyz;
+    //vec4 refraction_color = vec4(refraction * (1 - fastFresnel), 1);
 
-	frag_color = water_color + reflection_color * fastFresnel + refraction_color;
+	frag_color = water_color;// + reflection_color * fastFresnel + refraction_color;
 }
