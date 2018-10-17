@@ -212,7 +212,7 @@ edaf80::Assignment5::run() {
     auto waves_bump_id = bonobo::loadTexture2D("waves.png");
 
     // Create snake
-    auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape);
+    auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape, world_radi);
 
     // Create food nodes
     generate_food(sphere_shape, &default_shader, diffuse_uniforms, 20, snake.get_position());
@@ -277,7 +277,14 @@ edaf80::Assignment5::run() {
         t += 0.001 * ddeltatime;
 
         // Handle snake input
-        snake.handle_input(inputHandler);
+        if (snake.is_alive()){
+            snake.handle_input(inputHandler);
+        }
+        if (inputHandler.GetKeycodeState(GLFW_KEY_SPACE) & JUST_PRESSED & !snake.is_alive()) {
+            std::cout << "space clicked";
+            int p_half = std::round((double)snake.get_points() / 2);
+            snake.add_points(-p_half);
+        }
 
         int framebuffer_width, framebuffer_height;
         glfwGetFramebufferSize(window, &framebuffer_width, &framebuffer_height);
@@ -292,8 +299,10 @@ edaf80::Assignment5::run() {
 
             // Render skybox
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
-            if (snake.is_alive()) {
-                snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
+            snake.render(mCamera.GetWorldToClipMatrix(), ddeltatime);
+
+            if (!snake.is_alive()) {
+                snake.disable_movement();
             }
 
             mCamera.mWorld.SetTranslate(snake.get_position() +
@@ -326,6 +335,9 @@ edaf80::Assignment5::run() {
             int p = snake.get_points();
             std::string message = "Points: " + std::to_string(p);
             ImGui::TextColored(ImVec4(0.0, 1.0, 0.0, 1.0), "Points: %d", p);
+            if (!snake.is_alive()) {
+                ImGui::TextColored(ImVec4(1.0, 0.0, 0.0, 1.0), "You died! Click <Space> to pay half your points and turn back time!");
+            }
         }
         ImGui::End();
 
