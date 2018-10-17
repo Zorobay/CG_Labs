@@ -46,6 +46,7 @@ Node
 createSpecialFood() {
         auto food_node = Node();
         int kind = rand() % 100;
+        std::string texture_img = "fieldstone_bump.png";
         if(kind < 5){
             //redbull
         } else 
@@ -54,11 +55,12 @@ createSpecialFood() {
         } else 
         if (kind < 20){
             //speed and points
+           texture_img = "redbull.png";
         } else {
             //normal
+            texture_img = "redbull.png";
         } 
-        GLuint texture = bonobo::loadTexture2D("fieldstone_bump.png");
-        food_node.add_texture("normal_map", texture, GL_TEXTURE_2D);
+        //food_node.add_texture("normal_map", bonobo::loadTexture2D("holes_diffuse.png"), GL_TEXTURE_2D);
         return food_node;
 }
 
@@ -81,6 +83,7 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
 
         auto food_node = createSpecialFood();
         food_node.set_geometry(shape);
+        food_node.add_texture("diffuse_texture", bonobo::loadTexture2D("test.png"), GL_TEXTURE_2D);
         food_node.set_scaling(glm::vec3(food_radi * 0.8));
         food_node.set_translation(glm::vec3(x_pos, 0.0f, z_pos));
         food_node.set_program(program, set_uniforms);
