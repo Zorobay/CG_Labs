@@ -31,6 +31,7 @@ class Snejk
     void add_points(int p);
     void disable_movement();
     void reset();
+    void inc_speed_score_multi();
 
   private:
     int points = 0;
@@ -57,6 +58,8 @@ class Snejk
     const float segment_distance = 1.7f;
     float _world_radi;
     bool alive = true;
+    float speed_multi;
+    float score_multi;
     //    float speed_up_timer = 0.0f;
     //    const float max_speed = base_move_speed * 2.0f;
     //    bool is_sped_up = false;

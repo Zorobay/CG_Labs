@@ -48,25 +48,32 @@ edaf80::Assignment5::~Assignment5()
 
 Food makeSpecial(Node food_node)
 {
-    int kind = rand() % 100;
+    int kind = rand() % 10;
     std::string texture_img = "";
     Food food_man = Food();
+    Node bestNode = Node();
 
-    if (kind < 5)
+    if (kind <= 1)
     {
         //redbull
         texture_img = "redsneek.png";
+        food_node.add_child(&bestNode);
+        food_node.add_child(&bestNode);
+        food_node.add_child(&bestNode);
     }
-    else if (kind < 10)
+    else if (kind <=3)
     {
         //confusion
         texture_img = "purpl.png";
+        food_node.add_child(&bestNode);
+        food_node.add_child(&bestNode);
     }
-    else if (kind < 20)
+    else if (kind <= 5)
     {
         //speed and points
         texture_img = "lightblue.png";
-    }
+        food_node.add_child(&bestNode);
+         }
     else
     {
         //normal
@@ -83,7 +90,7 @@ void edaf80::Assignment5::generate_food(bonobo::mesh_data const &shape, GLuint c
 {
     std::random_device rd;      // Seed
     std::mt19937 ran_gen(rd()); // Random generator
-    std::uniform_int_distribution<int> dist(-world_radi, world_radi);
+    std::uniform_int_distribution<int> dist(-world_radi*0.5, world_radi*0.5);
 
     for (size_t i = 0; i < amount; i++)
     {
@@ -392,7 +399,14 @@ void edaf80::Assignment5::run()
                 {
                     snake.add_node();
                     snake.speed_up();
-                    snake.add_points(1);
+                    std::cout << f.kind() << " that food just died" << std::endl;
+                    switch(f.kind()){
+                        case 0: break;
+                        case 1: snake.inc_speed_score_multi(); break;
+                        case 2: snake.add_points(10);break;
+                        case 3: snake.add_points(24);break;
+                    }
+                    snake.add_points(10);
                     food.erase(food.begin() + i);
                     generate_food(sphere_shape, &default_shader, diffuse_uniforms, 1,
                                   snake.get_position()); // Generate new food

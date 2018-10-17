@@ -25,3 +25,7 @@ glm::vec3 Food::get_translation() const
 {
     return food_node.get_translation();
 };
+
+int Food::kind() {
+    return static_cast<int>(food_node.get_children_nb());
+}

@@ -19,6 +19,7 @@ public:
   void render(glm::mat4 const &WVP, glm::mat4 const &world) const;
   glm::mat4x4 get_transform() const;
   glm::vec3 get_translation() const;
+  int kind();
 
 private:
   Node food_node;

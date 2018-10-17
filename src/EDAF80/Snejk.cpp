@@ -21,6 +21,8 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     _set_uniforms = set_uniforms;
     _shape = shape;
     _world_radi = world_radi;
+    speed_multi = 1.0f;
+    score_multi = 1.0f;
 
     head_node.set_program(_shader, _set_uniforms);
     head_node.set_geometry(_shape);
@@ -44,7 +46,7 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time)
 {
 
     // Move head
-    head_position += move_direction * delta_time * move_speed;
+    head_position += move_direction * delta_time * move_speed * speed_multi;
     head_node.set_translation(head_position);
     head_node.set_rotation_y(_rotation);
     head_node.render(world_to_clip, head_node.get_transform());
@@ -66,7 +68,7 @@ void Snejk::render(glm::mat4 const &world_to_clip, const float delta_time)
 
 void Snejk::handle_input(InputHandler inputHandler)
 {
-    float rotation_amount = glm::two_pi<float>() * turn_speed;
+    float rotation_amount = glm::two_pi<float>() * turn_speed * speed_multi;
 
     if (inputHandler.GetKeycodeState(GLFW_KEY_LEFT) & PRESSED)
     { //Turn left
@@ -136,7 +138,7 @@ bool Snejk::is_alive()
     }
 
     // Died from going into wall
-    if (_world_radi*0.5 < glm::distance(head_position, glm::vec3(0,0,0)))
+    if (_world_radi * 0.5 < glm::distance(head_position, glm::vec3(0,0,0)))
     {
         alive = false;
         return alive;
@@ -167,8 +169,8 @@ float Snejk::get_radius()
 
 void Snejk::speed_up()
 {
-    move_speed += move_speed_factor;
-    turn_speed += turn_speed_factor;
+    move_speed += move_speed_factor; 
+    turn_speed += turn_speed_factor; 
     if (glm::length(head_position - _positions[_positions.size() - _tail_segment_offset]) > segment_distance)
     {
         _tail_segment_offset--;
@@ -182,7 +184,7 @@ int Snejk::get_points()
 
 void Snejk::add_points(int p)
 {
-    points += p;
+    points += p * score_multi;
 }
 
 void Snejk::disable_movement()
@@ -196,6 +198,8 @@ void Snejk::reset()
     points = 0;
     move_speed = base_move_speed;
     turn_speed = base_turn_speed;
+    speed_multi = 1.0f;
+    score_multi = 1.0f;
     _nodes.clear();
     head_position = glm::vec3(0, 0, 0);
     move_direction = glm::normalize(glm::vec3(0, 0, -1));
@@ -216,4 +220,9 @@ void Snejk::reset()
     }
 
     alive = true;
+}
+
+void Snejk::inc_speed_score_multi(){
+    speed_multi += 1.05f;
+    score_multi += 1.05f;
 }
