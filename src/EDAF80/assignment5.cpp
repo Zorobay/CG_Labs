@@ -100,7 +100,8 @@ edaf80::Assignment5::run() {
 
     // Load the sphere geometry
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
-    auto quad_shape = parametric_shapes::createQuad(world_radi*2.5, world_radi*2.5, 20.0f);
+    auto quad_shape = parametric_shapes::createQuad(world_radi*2.1, world_radi*2.1, 30.0f);
+    auto circle_shape = parametric_shapes::createCircleRing(40.0f, 40.0f, 0.0f, world_radi*0.8);
     if (sphere_shape.vao == 0u | quad_shape.vao == 0u) {
         LogError("Failed to retrieve the circle ring mesh");
         return;
@@ -193,10 +194,10 @@ edaf80::Assignment5::run() {
 
     // Setup water uniforms
     auto t = 1.0f;
-    auto color_deep = glm::vec4(0.0, 0.0, 0.1, 1.0);
-    auto color_shallow = glm::vec4(0.0, 0.4, 0.4, 1.0);
-    float wave_amp1 = 1.5;
-    float wave_amp2 = 0.5;
+    auto color_deep = glm::vec4(0.0, 0.0, 0.3, 1.0);
+    auto color_shallow = glm::vec4(0.2, 0.6, 0.7, 1.0);
+    float wave_amp1 = 1.0;
+    float wave_amp2 = 0.4;
     auto dir1 = glm::vec2(-1.0, 0.0);
     auto dir2 = glm::vec2(-0.7, 0.7);
     auto const water_uniforms = [&light_position, &t, &camera_position, &color_deep, &color_shallow, &wave_amp1, &wave_amp2](
@@ -235,7 +236,13 @@ edaf80::Assignment5::run() {
     water_node.set_program(&water_shader, water_uniforms);
     water_node.add_texture("reflection_cube_map", cube_map_id, GL_TEXTURE_CUBE_MAP);
     water_node.add_texture("bump_map", waves_bump_id, GL_TEXTURE_2D);
-    water_node.translate(glm::vec3(0.0, -2.0, 0.0));
+    water_node.translate(glm::vec3(0.0, -3.0, 0.0));
+
+    auto plane_node = Node();
+    plane_node.set_geometry(circle_shape);
+    plane_node.set_program(&default_shader, diffuse_uniforms);
+    plane_node.add_texture("soil", bonobo::loadTexture2D("Soil.png"), GL_TEXTURE_2D);
+    plane_node.set_translation(glm::vec3(0.0, -0.4, 0.0));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -304,6 +311,7 @@ edaf80::Assignment5::run() {
         if (!shader_reload_failed) {
             //Render water
             water_node.render(mCamera.GetWorldToClipMatrix(), water_node.get_transform());
+            plane_node.render(mCamera.GetWorldToClipMatrix(), plane_node.get_transform());
 
             // Render skybox
             skybox_node.render(mCamera.GetWorldToClipMatrix(), skybox_node.get_transform());
