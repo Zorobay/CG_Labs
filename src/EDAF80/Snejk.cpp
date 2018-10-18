@@ -23,13 +23,15 @@ Snejk::Snejk(GLuint const *const shader, std::function<void(GLuint)> const &set_
     _world_radi = world_radi;
     speed_multi = 1.0f;
     score_multi = 1.0f;
-    _cameraDistance = 7.0;
+    _cameraDistance = 9.0;
     zoom_out_buffer = 0;
+    _rotation = glm::pi<float>();
 
     head_node.set_program(_shader, _set_uniforms);
     head_node.set_geometry(_shape);
     head_node.set_translation(head_position);
-    head_node.set_scaling(glm::vec3(_head_radi, _head_radi*0.7, _head_radi*0.9));
+    head_node.set_scaling(glm::vec3(0.5));
+    head_node.rotate_y(glm::half_pi<float>());
     head_node.add_texture("normal_map", _texture_bump, GL_TEXTURE_2D);
     head_node.add_texture("diffuse_texture", _texture_diffuse, GL_TEXTURE_2D);
 
@@ -106,6 +108,11 @@ void Snejk::handle_input(InputHandler inputHandler)
 }
 
 glm::vec3 Snejk::get_position()
+{
+    return head_position;
+}
+
+glm::vec3 Snejk::get_position(int p)
 {
     return head_position;
 }
@@ -232,7 +239,7 @@ void Snejk::reset()
     _directions.clear();
     _rotations.clear();
     _counter = 0;
-    _rotation = glm::half_pi<float>();
+    _rotation = glm::pi<float>();
     _cameraDistance = 7.0;
     _tail_segment_offset = 20;
 
@@ -248,7 +255,8 @@ void Snejk::reset()
 }
 
 void Snejk::inc_speed_score_multi(){
-    speed_multi += 0.05f;
+    speed_multi += 0.03f;
+    turn_speed = turn_speed*1.01;
     score_multi += 0.1f;
 }
 float Snejk::cameraFactor()

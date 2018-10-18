@@ -10,6 +10,7 @@
 #include "core/helpers.hpp"
 #include "core/ShaderProgramManager.hpp"
 #include "core/InputHandler.h"
+#include <glm/gtc/type_ptr.hpp>
 #include <ctime>
 #include <cmath>
 
@@ -22,6 +23,7 @@ class Snejk
     void add_node(const float size_multiplier);
     void add_node();
     glm::vec3 get_position();
+    glm::vec3 get_position(int p);
     glm::vec3 get_move_direction();
     float get_rotation_y();
     float get_radius();
@@ -49,7 +51,7 @@ class Snejk
     std::vector<float> _rotations;
     size_t _counter = 0;
     float _rotation = glm::half_pi<float>();
-    const float _tail_radi = 0.5f;
+    const float _tail_radi = 0.3f;
     const float _head_radi = 0.8f;
     size_t _tail_segment_offset = 20;
     float move_speed;

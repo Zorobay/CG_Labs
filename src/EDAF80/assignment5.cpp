@@ -122,6 +122,7 @@ void edaf80::Assignment5::run()
     auto sphere_shape = parametric_shapes::createSphere(60u, 60u, 1.0f);
     auto quad_shape = parametric_shapes::createQuad(world_radi*2.1, world_radi*2.1, 30.0f);
     auto circle_shape = parametric_shapes::createQuad(world_radi, world_radi, 30);
+    auto food_shape = parametric_shapes::createSphere(5u,5u, 1.0f);
     if (sphere_shape.vao == 0u | quad_shape.vao == 0u | circle_shape.vao == 0u)
     {
         LogError("Failed to retrieve the circle ring mesh");
@@ -139,6 +140,17 @@ void edaf80::Assignment5::run()
         return;
     }
     bonobo::mesh_data const &tree = objects.front();
+
+    std::vector<bonobo::mesh_data> objects2 = bonobo::loadObjects("snake_head.obj");
+    if (objects2.empty())
+    {
+        LogError("Failed to load the snake_head geometry: exiting.");
+
+        Log::View::Destroy();
+        Log::Destroy();
+        return;
+    }
+    bonobo::mesh_data const &snake_head = objects2.front();
 
     // Set up the camera
     mCamera.mWorld.SetTranslate(glm::vec3(0.0f, camera_y_disp, camera_z_disp));
@@ -279,10 +291,10 @@ void edaf80::Assignment5::run()
     auto waves_bump_id = bonobo::loadTexture2D("waves.png");
 
     // Create snake
-    auto snake = Snejk(&default_shader, phong_set_uniforms, sphere_shape, world_radi);
+    auto snake = Snejk(&default_shader, phong_set_uniforms, snake_head, world_radi);
 
     // Create food nodes
-    generate_food(sphere_shape, &default_shader, diffuse_uniforms, 20, snake.get_position());
+    generate_food(food_shape, &default_shader, diffuse_uniforms, 20, snake.get_position());
 
     auto skybox_node = Node();
     skybox_node.set_geometry(sphere_shape);
@@ -305,9 +317,15 @@ void edaf80::Assignment5::run()
 
     auto tree_node = Node();
     tree_node.set_geometry(tree);
-    tree_node.set_program(&blinn_phong_shader, phong_set_uniforms);
+    tree_node.set_program(&fallback_shader, set_uniforms);
     tree_node.set_translation(glm::vec3(-4.0, -0.4, -14.0));
     tree_node.set_scaling(glm::vec3(0.08));
+
+    auto snek_node = Node();
+    snek_node.set_geometry(tree);
+    snek_node.set_program(&fallback_shader, set_uniforms);
+    snek_node.set_translation(glm::vec3(-4.0, -0.4, -14.0));
+    snek_node.set_scaling(glm::vec3(0.08));
 
     glEnable(GL_DEPTH_TEST);
 
@@ -327,7 +345,7 @@ void edaf80::Assignment5::run()
     glCullFace(GL_BACK);
 
     std::vector<std::pair<glm::vec3, float>> obstacles = std::vector<std::pair<glm::vec3, float>>();
-    obstacles.push_back(std::make_pair(tree_node.get_translation()+glm::vec3(-0.2,0,0.5), 0.3));
+    obstacles.push_back(std::make_pair(tree_node.get_translation()+glm::vec3(-0.4,0,0.7), 0.3));
 
     while (!glfwWindowShouldClose(window))
     {
@@ -409,7 +427,7 @@ void edaf80::Assignment5::run()
             mCamera.mWorld.SetTranslate(snake.get_position() +
                                         glm::vec3(-snake.get_move_direction().x * snake.cameraFactor(), camera_y_disp,
                                                   -snake.get_move_direction().z * snake.cameraFactor()));
-            mCamera.mWorld.LookAt(snake.get_position());
+            mCamera.mWorld.LookAt(snake.get_position(1));
 
             // Render food
             for (size_t i = 0; i < food.size(); i++)
